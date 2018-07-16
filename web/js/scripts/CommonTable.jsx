@@ -21,7 +21,7 @@ export default class CommonTable extends React.Component {
             return <CommonTableRow row={row} key={idx} cols={this.state.columns} rowClick={this.props.rowClick} />
         }, this);
         return (
-            <div className="col-md-11">
+            <div>
                 <table className="table-striped table-bordered summary-table">
                     <thead>
                         <CommonTableHeader data={this.state.columns} />

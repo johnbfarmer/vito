@@ -113,10 +113,10 @@ export default class VitoChart extends React.Component {
         this.updateConfig();
         return (
             <div>
-                <div className="col-md-1" id="vito-metric-select">
+                <div id="vito-metric-select">
                     <ChartMetricSelect selectedMetrics={this.state.selectedMetrics} metrics={this.metrics} common={this.props.common} metricSelect={this.metricSelect} />
                 </div>
-                <div className="col-md-11" id="vito-chart">
+                <div id="vito-chart">
                     <ReactHighcharts config={this.state.config} ref="chart"></ReactHighcharts>;
                 </div>
             </div>

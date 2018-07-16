@@ -73,7 +73,7 @@ export default class VitoEdit extends React.Component {
     render() {
         var formMarkup = this.getFormMarkup();
         return (
-            <div className="col-md-11" dangerouslySetInnerHTML={formMarkup} />
+            <div dangerouslySetInnerHTML={formMarkup} />
         );
     }
 }

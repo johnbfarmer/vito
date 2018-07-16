@@ -7,7 +7,7 @@ export default class VitoNav extends React.Component {
     render() {
         var aggNav = this.props.common.useAgg ? <AggNav common={this.props.common} /> : ''
         return (
-            <div className="col-md-1">
+            <div>
                 <ViewNav common={this.props.common} />
                 <PersonSelect common={this.props.common} />
                 {aggNav}

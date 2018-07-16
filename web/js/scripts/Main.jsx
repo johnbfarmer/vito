@@ -154,8 +154,12 @@ export default class Vito extends React.Component {
         var viewTag = this.getViewTag();
         return (
             <div>
-                <VitoNav common={common} />
-                {viewTag}
+                <div className="col-md-1">
+                    <VitoNav common={common} />
+                </div>
+                <div className="col-md-11">
+                    {viewTag}
+                </div>
                 <Spinner show={this.state.loading} />
                 <DialogBox msg={this.state.dialogMessage} title={this.state.dialogTitle} show={this.state.showDialog} close={this.closeDialog} agree={this.closeDialog}/>
             </div>
