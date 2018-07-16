@@ -1,0 +1,75 @@
+{% extends 'vitalstat/base.vito.html.twig' %}
+
+{% block content %}
+    <table>
+        <tbody>
+            <tr>
+                <th>Date</th>
+                <td>{% if vitalStat.date %}{{ vitalStat.date|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Person</th>
+                <td>{{ vitalStat.person }}</td>
+            </tr>
+            <tr>
+                <th>Distance</th>
+                <td>{{ vitalStat.distance }}</td>
+            </tr>
+            <tr>
+                <th>Distancerun</th>
+                <td>{{ vitalStat.distanceRun }}</td>
+            </tr>
+            <tr>
+                <th>Steps</th>
+                <td>{{ vitalStat.steps }}</td>
+            </tr>
+            <tr>
+                <th>Sleep</th>
+                <td>{{ vitalStat.sleep }}</td>
+            </tr>
+            <tr>
+                <th>Weight</th>
+                <td>{{ vitalStat.weight }}</td>
+            </tr>
+            <tr>
+                <th>Abdominals</th>
+                <td>{{ vitalStat.abdominals }}</td>
+            </tr>
+            <tr>
+                <th>Systolic</th>
+                <td>{{ vitalStat.systolic }}</td>
+            </tr>
+            <tr>
+                <th>Diastolic</th>
+                <td>{{ vitalStat.diastolic }}</td>
+            </tr>
+            <tr>
+                <th>Pulse</th>
+                <td>{{ vitalStat.pulse }}</td>
+            </tr>
+            <tr>
+                <th>Alcohol</th>
+                <td>{{ vitalStat.alcohol }}</td>
+            </tr>
+            <tr>
+                <th>Tobacco</th>
+                <td>{{ vitalStat.tobacco }}</td>
+            </tr>
+            <tr>
+                <th>Comments</th>
+                <td>{{ vitalStat.comments }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vitalstat_edit', { 'id': vitalStat.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

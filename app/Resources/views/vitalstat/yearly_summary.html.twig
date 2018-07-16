@@ -1,0 +1,70 @@
+{% extends 'vitalstat/base.vito.html.twig' %}
+
+{% block links %}
+    <ul>
+        <li>
+            <a href="{{ path('vitalstat_new') }}">New Record</a>
+        </li>
+        <li>
+            {% for y in otherYears %}
+                <a href="{{ path('vitalstat_year', {'id': personId, 'year': y}) }}">{{ y }}</a> 
+            {% endfor %}
+        </li>
+        <li>
+            <a href="{{ path('vitalstat_index') }}">Home</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <table>
+        <thead>
+            <tr>
+                <th>Month</th>
+                {% for header in columnHeaders %}
+                    <th>{{ header }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for vitalStat in vitalStats %}
+            <tr>
+                <td><a href="{{ path('vitalstat_index_by_person_and_month', {'id': personId, 'yearMonth': vitalStat.ym}) }}">{{ vitalStat.date }}</a></td>
+                {% if vitalStat.distanceRun is defined %}
+                    <td>{{ vitalStat.distanceRun }}</td>
+                {% endif %}
+                {% if vitalStat.distance is defined %}
+                    <td>{{ vitalStat.distance }}</td>
+                {% endif %}
+                {% if vitalStat.steps is defined %}
+                    <td>{{ vitalStat.steps }}</td>
+                {% endif %}
+                {% if vitalStat.stepsPerKm is defined %}
+                    <td>{{ vitalStat.stepsPerKm }}</td>
+                {% endif %}
+                {% if vitalStat.abdominals is defined %}
+                    <td>{{ vitalStat.abdominals }}</td>
+                {% endif %}
+                {% if vitalStat.weight is defined %}
+                    <td>{{ vitalStat.weight }}</td>
+                {% endif %}
+                {% if vitalStat.sleep is defined %}
+                    <td>{{ vitalStat.sleep }}</td>
+                {% endif %}
+                {% if vitalStat.alcohol is defined %}
+                    <td>{{ vitalStat.alcohol }}</td>
+                {% endif %}
+                {% if vitalStat.tobacco is defined %}
+                    <td>{{ vitalStat.tobacco }}</td>
+                {% endif %}
+                {% if vitalStat.bp is defined %}
+                    <td>{{ vitalStat.bp }}</td>
+                {% endif %}
+                {% if vitalStat.pulse is defined %}
+                    <td>{{ vitalStat.pulse }}</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

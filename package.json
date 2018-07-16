@@ -1,0 +1,35 @@
+{
+  "name": "vito-vital-stats",
+  "version": "1.0.0",
+  "description": "none +++++++++++++++++++++++++++",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "highcharts": "^6.1.0",
+    "moment": "^2.18.1",
+    "path": "^0.12.7",
+    "react": "^15.6.1",
+    "react-addons-css-transition-group": "^15.6.0",
+    "react-bootstrap": "^0.31.2",
+    "react-day-picker": "^7.1.9",
+    "react-dom": "^15.6.1",
+    "react-highcharts": "^16.0.2",
+    "react-tabs": "^1.1.0",
+    "respinner": "^2.2.1",
+    "webpack": "^3.4.1"
+  },
+  "devDependencies": {
+    "css-loader": "^1.0.0"
+  }
+}

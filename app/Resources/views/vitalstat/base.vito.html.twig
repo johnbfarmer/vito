@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vito</h1>
+    {% block links %}
+        <ul>
+            <li>
+                <a href="{{ path('vitalstat_new') }}">New Record</a>
+            </li>
+            <li>
+                <a href="{{ path('vitalstat_year', {'id': personId, 'year': 0}) }}">History</a>
+            </li>
+            <li>
+                <a href="{{ path('vitalstat_index') }}">Home</a>
+            </li>
+        </ul>
+    {% endblock %}
+
+    {% block content %}
+        please override the content block
+    {% endblock %}
+{% endblock %}

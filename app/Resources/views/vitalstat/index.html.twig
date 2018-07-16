@@ -1,0 +1,70 @@
+{% extends 'vitalstat/base.vito.html.twig' %}
+
+{% block links %}
+    <ul>
+        {% if prevMonth is defined or nextMonth is defined %}
+            <li>
+                {% if prevMonth is defined %}
+                    <a href="{{ path('vitalstat_index_by_person_and_month', {'id': personId, 'yearMonth': prevMonth}) }}">{{ prevMonth }}</a>
+                {% endif %}
+                {% if nextMonth is defined %}
+                    <a href="{{ path('vitalstat_index_by_person_and_month', {'id': personId, 'yearMonth': nextMonth}) }}">{{ nextMonth }}</a>
+                {% endif %}
+            </li>
+        {% endif %}
+        <li>
+            <a href="{{ path('vitalstat_new') }}">New Record</a>
+        </li>
+        <li>
+            <a href="{{ path('vitalstat_year', {'id': personId, 'year': 0}) }}">History</a>
+        </li>
+        <li>
+            <a href="{{ path('vitalstat_index') }}">Home</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Person</th>
+                <th>Distance</th>
+                <th>Distancerun</th>
+                <th>Steps</th>
+                <th>Steps / Km</th>
+                <th>Sleep</th>
+                <th>Weight</th>
+                <th>Abdominals</th>
+                <th>Systolic</th>
+                <th>Diastolic</th>
+                <th>Pulse</th>
+                <th>Alcohol</th>
+                <th>Tobacco</th>
+                <th>Comments</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vitalStat in vitalStats %}
+            <tr>
+                <td>{% if vitalStat.date %}<a href="{{ path('vitalstat_edit', { 'id': vitalStat.id }) }}">{{ vitalStat.date|date('Y-m-d') }}</a>{% endif %}</td>
+                <td><a href="{{ path('vitalstat_index_by_person', { 'id': vitalStat.personId }) }}">{{ vitalStat.person }}</a></td>
+                <td>{{ vitalStat.distance }}</td>
+                <td>{{ vitalStat.distanceRun }}</td>
+                <td>{{ vitalStat.steps }}</td>
+                <td>{{ vitalStat.stepsPerKm }}</td>
+                <td>{{ vitalStat.sleep }}</td>
+                <td>{{ vitalStat.weight }}</td>
+                <td>{{ vitalStat.abdominals }}</td>
+                <td>{{ vitalStat.systolic }}</td>
+                <td>{{ vitalStat.diastolic }}</td>
+                <td>{{ vitalStat.pulse }}</td>
+                <td>{{ vitalStat.alcohol }}</td>
+                <td>{{ vitalStat.tobacco }}</td>
+                <td>{{ vitalStat.comments }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
