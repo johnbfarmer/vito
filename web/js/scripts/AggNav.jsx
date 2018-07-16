@@ -1,6 +1,6 @@
 import React from 'react';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
-// import 'react-day-picker/lib/style.css';
+import 'react-day-picker/lib/style.css';
 
 export default class AggNav extends React.Component {
     render() {
