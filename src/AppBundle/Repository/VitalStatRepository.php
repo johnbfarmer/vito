@@ -82,12 +82,14 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
         $id = $agg === 'months' ? 'CONCAT("ym_", YEAR(v.date), LPAD(MONTH(v.date),2,0))' : 'CONCAT("yw_", YEARWEEK(v.date, 3))';
         $dateStart = !empty($dates['start']) ? $dates['start'] : null;
         $dateEnd = !empty($dates['end']) ? $dates['end'] : null;
+        $limit = $agg === 'months' ? 12 : 13;
 
         $sql = '
         SELECT 
             SUM(`distance_run`) AS distance_run,
             ROUND(SUM(`distance`), 1) AS distance,
-            CONCAT(FLOOR(AVG(`sleep`)/60), "h ", ROUND(AVG(`sleep`)%60), "m") AS sleep,
+            -- CONCAT(FLOOR(AVG(`sleep`)/60), "h ", ROUND(AVG(`sleep`)%60), "m") AS sleep,
+            ROUND(AVG(`sleep`), 2) AS sleep,
             ROUND(SUM(`steps`)) AS steps,
             IFNULL(ROUND(AVG(`steps`)/AVG(`distance`), 2), 0) AS stepsPerKm,
             ROUND(AVG(`alcohol`),1) AS alcohol,
@@ -111,7 +113,7 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
         $sql .= '
         GROUP BY ' . $key . '
         ORDER BY ' . $key . ' DESC
-        LIMIT 100;';
+        LIMIT ' . $limit . ';';
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':personId', $personId, \PDO::PARAM_STR);

@@ -18,6 +18,8 @@ export default class Vito extends React.Component {
             recordId: 0,
             people: [{id:1, name: 'John'},{id:2, name: 'Ian'},{id:3, name: 'Pily'}],
             agg: 'months',
+            selectedChartMetrics: ['weight'],
+            availableChartMetrics: ['bp', 'weight'],
             view: 'recent',
             showDialog: false,
             dialogMessage: '',
@@ -26,7 +28,7 @@ export default class Vito extends React.Component {
             loading: true,
         };
 
-        this.chartMetrics = {
+        this.metricLabels = {
             'distance': 'Distance',
             'distance_run': 'Distance Run',
             'steps': 'Steps',
@@ -46,6 +48,8 @@ export default class Vito extends React.Component {
         this.updateRecord = this.updateRecord.bind(this);
         this.updateDateStart = this.updateDateStart.bind(this);
         this.updateAgg = this.updateAgg.bind(this);
+        this.updateSelectedChartMetrics = this.updateSelectedChartMetrics.bind(this);
+        this.updateAvailableChartMetrics = this.updateAvailableChartMetrics.bind(this);
         this.updateView = this.updateView.bind(this);
         this.updateLoading = this.updateLoading.bind(this);
         this.getViewTag = this.getViewTag.bind(this);
@@ -77,6 +81,16 @@ export default class Vito extends React.Component {
         this.setState({makeApiCall: true, agg: agg});
     }
 
+    updateSelectedChartMetrics(e) {
+        var dataset = e.target.dataset;
+        var metric = dataset.metric;
+        this.setState({makeApiCall: false, selectedChartMetrics: [metric]});
+    }
+
+    updateAvailableChartMetrics(m) {
+        this.setState({makeApiCall: false, availableChartMetrics: m});
+    }
+
     updateView(e) {
         var dataset = e.target.dataset;
         var view = dataset.view;
@@ -102,13 +116,17 @@ export default class Vito extends React.Component {
             updateDateStart: this.updateDateStart,
             agg: this.state.agg,
             updateAgg: this.updateAgg,
+            selectedChartMetrics: this.state.selectedChartMetrics,
+            updateSelectedChartMetrics: this.updateSelectedChartMetrics,
+            availableChartMetrics: this.state.availableChartMetrics,
+            updateAvailableChartMetrics: this.updateAvailableChartMetrics,
             view: this.state.view,
             updateView: this.updateView,
             updateLoading: this.updateLoading,
             useAgg: this.state.view === 'summary',
             makeApiCall: this.state.makeApiCall,
             updateState: this.updateState,
-            chartMetrics: this.chartMetrics,
+            metricLabels: this.metricLabels,
         };
     }
 

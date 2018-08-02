@@ -6,7 +6,7 @@ export default class VitoChart extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedMetrics: ['distance_run'],
+            selectedMetrics: ['weight'],
             config: {
                 title: {
                     text: 'VitoStats'
@@ -26,8 +26,27 @@ export default class VitoChart extends React.Component {
         }
 
         this.metrics = [];
+    }
 
-        this.metricSelect = this.metricSelect.bind(this);
+    componentDidUpdate(prevProps, prevState) {
+        // console.log('cdu' + this.props.newData);
+        // console.log(prevProps.common.makeApiCall, this.props.common.makeApiCall);
+        // console.log(prevProps.common.selectedChartMetrics, this.props.common.selectedChartMetrics);
+        // console.log(prevProps.data, this.props.data);
+        if (prevProps.common.selectedChartMetrics !== this.props.common.selectedChartMetrics) {
+            this.updateConfig();
+            return null;
+        }
+
+        if (!('table' in prevProps.data) && 'table' in this.props.data) {
+            this.updateConfig();
+            return null;
+        }
+
+        if (this.props.newData) {
+            this.updateConfig();
+            return null;
+        }
     }
 
     updateConfig() {
@@ -44,7 +63,7 @@ export default class VitoChart extends React.Component {
         var config = this.defaultConfig();
         this.metrics = [];
         config.series = [{
-            name: this.props.common.chartMetrics[this.state.selectedMetrics[0]],
+            name: this.props.common.metricLabels[this.state.selectedMetrics[0]],
             data: [],
         }];
         if (this.state.selectedMetrics[0] === 'bp') {
@@ -57,7 +76,7 @@ export default class VitoChart extends React.Component {
         this.props.data.table.rows.forEach((v,k) => {
             if (this.metrics.length < 1) {
                 for (var i in v) {
-                    if (i in this.props.common.chartMetrics) {
+                    if (i in this.props.common.metricLabels) {
                         this.metrics.push(i);
                     }
                 }
@@ -82,12 +101,8 @@ export default class VitoChart extends React.Component {
         });
 
         this.state.config = config;
-    }
-
-    metricSelect(e) {
-        var dataset = e.target.dataset;
-        var metric = dataset.metric;
-        this.setState({selectedMetrics: [metric]});
+        this.props.common.updateAvailableChartMetrics(this.metrics);
+        this.props.updateNewData(false);
     }
 
     defaultConfig() {
@@ -110,12 +125,8 @@ export default class VitoChart extends React.Component {
     }
 
     render() {
-        this.updateConfig();
         return (
             <div>
-                <div id="vito-metric-select">
-                    <ChartMetricSelect selectedMetrics={this.state.selectedMetrics} metrics={this.metrics} common={this.props.common} metricSelect={this.metricSelect} />
-                </div>
                 <div id="vito-chart">
                     <ReactHighcharts config={this.state.config} ref="chart"></ReactHighcharts>;
                 </div>

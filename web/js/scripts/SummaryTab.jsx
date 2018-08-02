@@ -13,12 +13,14 @@ export default class SummaryTab extends React.Component {
             dateRangeId: '201801',
             dateRangeType: 'ym',
             personId: props.common.personId || 1,
+            newData: false,
         };
 
         this.busy = true;
         this.makeApiCall = true;
         this.handleData = this.handleData.bind(this);
         this.rowClick = this.rowClick.bind(this);
+        this.updateNewData = this.updateNewData.bind(this);
     }
 
     componentDidMount() {
@@ -32,9 +34,6 @@ export default class SummaryTab extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         var id = this.state.personId;
-        var prevId = prevState.personId;
-        var agg = this.state.agg;
-        var prevAgg = prevState.agg;
         var change = this.makeApiCall || this.props.common.makeApiCall;
         if (!this.busy && change) {
             this.handleData(id);
@@ -58,10 +57,14 @@ export default class SummaryTab extends React.Component {
                 return resp.json();
         }).then(resp => {
             if (resp.table.rows.length > 0) {
-                this.setState({personId: id, data: {table:{rows:resp.table.rows, columns:resp.table.columns}}});
+                this.setState({personId: id, data: {table:{rows:resp.table.rows, columns:resp.table.columns}}, newData: true});
             }
             this.loading(false);
         });
+    }
+
+    updateNewData(b) {
+        this.setState({newData: b});
     }
 
     rowClick(e) {
@@ -89,7 +92,7 @@ export default class SummaryTab extends React.Component {
         return (
             <div>
                 <CommonTable data={this.state.data} rowClick={this.rowClick} />
-                <VitoChart data={this.state.data} common={this.props.common} />
+                <VitoChart data={this.state.data} common={this.props.common} newData={this.state.newData} updateNewData={this.updateNewData} />
             </div>
         );
     }
