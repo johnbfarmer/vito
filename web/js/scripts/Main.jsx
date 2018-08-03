@@ -18,13 +18,15 @@ export default class Vito extends React.Component {
             recordId: 0,
             people: [{id:1, name: 'John'},{id:2, name: 'Ian'},{id:3, name: 'Pily'}],
             agg: 'months',
-            selectedChartMetrics: ['weight'],
+            selectedChartMetrics: ['distance_run'],
             availableChartMetrics: ['bp', 'weight'],
             view: 'recent',
             showDialog: false,
             dialogMessage: '',
             dialogTitle: '',
             makeApiCall: true,
+            data: {},
+            refreshChart: false,
             loading: true,
         };
 
@@ -53,6 +55,7 @@ export default class Vito extends React.Component {
         this.updateView = this.updateView.bind(this);
         this.updateLoading = this.updateLoading.bind(this);
         this.getViewTag = this.getViewTag.bind(this);
+        this.updateRefreshChart = this.updateRefreshChart.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
         this.updateState = this.updateState.bind(this);
     }
@@ -84,7 +87,7 @@ export default class Vito extends React.Component {
     updateSelectedChartMetrics(e) {
         var dataset = e.target.dataset;
         var metric = dataset.metric;
-        this.setState({makeApiCall: false, selectedChartMetrics: [metric]});
+        this.setState({makeApiCall: false, selectedChartMetrics: [metric], refreshChart: true});
     }
 
     updateAvailableChartMetrics(m) {
@@ -95,6 +98,10 @@ export default class Vito extends React.Component {
         var dataset = e.target.dataset;
         var view = dataset.view;
         this.setState({makeApiCall: true, view: view});
+    }
+
+    updateRefreshChart(b) {
+        this.setState({refreshChart: b});
     }
 
     updateLoading(loading) {
@@ -110,12 +117,15 @@ export default class Vito extends React.Component {
             personId: this.state.personId,
             recordId: this.state.recordId,
             dateStart: this.state.dateStart,
+            data: this.state.data,
             people: this.state.people,
             updatePerson: this.updatePerson,
             updateRecord: this.updateRecord,
             updateDateStart: this.updateDateStart,
             agg: this.state.agg,
             updateAgg: this.updateAgg,
+            refreshChart: this.state.refreshChart,
+            updateRefreshChart: this.updateRefreshChart,
             selectedChartMetrics: this.state.selectedChartMetrics,
             updateSelectedChartMetrics: this.updateSelectedChartMetrics,
             availableChartMetrics: this.state.availableChartMetrics,
@@ -165,9 +175,6 @@ export default class Vito extends React.Component {
     }
 
     render() {
-        // var elt = document.getElementById('content');
-        // var foo = elt.dataset.foo;
-        // console.log(foo);
         var common = this.common();
         var viewTag = this.getViewTag();
         return (

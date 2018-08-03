@@ -7,9 +7,8 @@ export default class RecentTab extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: {},
-            clients: [],
-            personId: props.common.personId,
+            data: props.common.data,
+            // personId: props.common.personId,
         };
 
         this.busy = true;
@@ -17,22 +16,23 @@ export default class RecentTab extends React.Component {
     }
 
     componentDidMount() {
-        this.handleData(this.state.personId);
+        this.handleData();
     }
 
     componentWillUpdate(props) {
-        this.state.personId = props.common.personId;
+        this.state.data = props.common.data;
     }
 
     componentDidUpdate(prevProps) {
-        var id = this.state.personId;
+        var id = this.props.common.personId;
         var prevId = prevProps.common.personId;
         if (!this.busy && id != prevId) {
-            this.handleData(id);
+            this.handleData();
         }
     }
 
-    handleData(id) {
+    handleData() {
+        var id = this.props.common.personId;
         this.loading(true);
         fetch('vito/recent/' + id)
             .then(resp => {
@@ -40,7 +40,7 @@ export default class RecentTab extends React.Component {
             })
             .then(resp => {
                 if (resp.table.rows.length > 0) {
-                    this.setState({personId: id, data: {table:{rows:resp.table.rows, columns:resp.table.columns}}});
+                    this.props.common.updateState({data: {table:{rows:resp.table.rows, columns:resp.table.columns}}});
                 }
                 this.loading(false);
             });

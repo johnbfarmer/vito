@@ -7,41 +7,37 @@ export default class SummaryTab extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: {},
-            clientUid: 0,
+            data: props.common.data,
             agg: 'months',
             dateRangeId: '201801',
             dateRangeType: 'ym',
-            personId: props.common.personId || 1,
-            newData: false,
         };
 
         this.busy = true;
         this.makeApiCall = true;
         this.handleData = this.handleData.bind(this);
         this.rowClick = this.rowClick.bind(this);
-        this.updateNewData = this.updateNewData.bind(this);
     }
 
     componentDidMount() {
-        this.handleData(this.state.personId);
+        this.handleData();
     }
 
     componentWillUpdate(props) {
-        this.state.personId = props.common.personId || 1;
+        this.state.data = props.common.data;
         this.state.agg = props.common.agg;
     }
 
     componentDidUpdate(prevProps, prevState) {
-        var id = this.state.personId;
         var change = this.makeApiCall || this.props.common.makeApiCall;
         if (!this.busy && change) {
-            this.handleData(id);
+            this.handleData();
         }
         this.makeApiCall = false;
     }
 
-    handleData(id) {
+    handleData() {
+        var id = this.props.common.personId || 1;
         this.loading(true);
         var url = 'vito/' + this.state.agg + '/' + id;
         var qs = '';
@@ -57,14 +53,10 @@ export default class SummaryTab extends React.Component {
                 return resp.json();
         }).then(resp => {
             if (resp.table.rows.length > 0) {
-                this.setState({personId: id, data: {table:{rows:resp.table.rows, columns:resp.table.columns}}, newData: true});
+                this.props.common.updateState({personId:id, data: {table:{rows:resp.table.rows, columns:resp.table.columns}}, refreshChart: true});
             }
             this.loading(false);
         });
-    }
-
-    updateNewData(b) {
-        this.setState({newData: b});
     }
 
     rowClick(e) {
@@ -91,8 +83,8 @@ export default class SummaryTab extends React.Component {
     render() {
         return (
             <div>
-                <CommonTable data={this.state.data} rowClick={this.rowClick} />
-                <VitoChart data={this.state.data} common={this.props.common} newData={this.state.newData} updateNewData={this.updateNewData} />
+                <CommonTable data={this.props.common.data} rowClick={this.rowClick} />
+                <VitoChart data={this.props.common.data} common={this.props.common} />
             </div>
         );
     }

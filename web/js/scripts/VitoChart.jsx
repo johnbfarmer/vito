@@ -24,26 +24,15 @@ export default class VitoChart extends React.Component {
                 },
             }
         }
-
-        this.metrics = [];
     }
 
     componentDidUpdate(prevProps, prevState) {
-        // console.log('cdu' + this.props.newData);
-        // console.log(prevProps.common.makeApiCall, this.props.common.makeApiCall);
-        // console.log(prevProps.common.selectedChartMetrics, this.props.common.selectedChartMetrics);
-        // console.log(prevProps.data, this.props.data);
-        if (prevProps.common.selectedChartMetrics !== this.props.common.selectedChartMetrics) {
-            this.updateConfig();
-            return null;
-        }
-
         if (!('table' in prevProps.data) && 'table' in this.props.data) {
             this.updateConfig();
             return null;
         }
 
-        if (this.props.newData) {
+        if (this.props.common.refreshChart) {
             this.updateConfig();
             return null;
         }
@@ -61,32 +50,50 @@ export default class VitoChart extends React.Component {
         var m = 0;
         var d = 0;
         var config = this.defaultConfig();
-        this.metrics = [];
+        var metrics = [];
+        var selectedMetrics = [];
+
+        this.props.data.table.columns.forEach((v,k) => {
+            if (v.uid in this.props.common.metricLabels) {
+                metrics.push(v.uid);
+            }
+        });
+
+        if (metrics.length < 1) {
+            return;
+        }
+
+        this.props.common.selectedChartMetrics.forEach((v,k) => {
+            if (metrics.indexOf(v) >= 0) {
+                selectedMetrics.push(v);
+            }
+        });
+
+        if (selectedMetrics.length < 1) {
+            selectedMetrics.push(metrics[0]);
+        }
+
+
+
         config.series = [{
-            name: this.props.common.metricLabels[this.state.selectedMetrics[0]],
+            name: this.props.common.metricLabels[selectedMetrics[0]],
             data: [],
         }];
-        if (this.state.selectedMetrics[0] === 'bp') {
+        if (selectedMetrics[0] === 'bp') {
             config.series[0].name = 'systolic';
             config.series.push({
                 name: 'diastolic',
                 data: [],
             });
         }
+
         this.props.data.table.rows.forEach((v,k) => {
-            if (this.metrics.length < 1) {
-                for (var i in v) {
-                    if (i in this.props.common.metricLabels) {
-                        this.metrics.push(i);
-                    }
-                }
-            }
             dt = v.iso_date;
             y = dt.substr(0,4);
             m = parseInt(dt.substr(5,2)) - 1;
             d = parseInt(dt.substr(8,2)) - 1;
             xVal = Date.UTC(y, m, d);
-            this.state.selectedMetrics.forEach((metricName, metricKey) => {
+            selectedMetrics.forEach((metricName, metricKey) => {
                 if (metricName === 'bp') {
                     if (v[metricName]) {
                         var vals = v[metricName].split('/');
@@ -101,8 +108,10 @@ export default class VitoChart extends React.Component {
         });
 
         this.state.config = config;
-        this.props.common.updateAvailableChartMetrics(this.metrics);
-        this.props.updateNewData(false);
+        // this.props.common.updateAvailableChartMetrics(metrics);
+        // this.props.common.updateNewData(false);
+        this.props.common.updateState({refreshChart: false, makeApiCall: false, availableChartMetrics: metrics, selectedChartMetrics: selectedMetrics});
+console.log({refreshChart: false, makeApiCall: false, availableChartMetrics: metrics, selectedChartMetrics: selectedMetrics});
     }
 
     defaultConfig() {
