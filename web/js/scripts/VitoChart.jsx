@@ -80,17 +80,25 @@ export default class VitoChart extends React.Component {
                 config.series.push({
                     name: 'Systolic',
                     data: [],
+                    yAxis: k,
                     uid: 'systolic',
                 });
             }
             seriesObj = {
                 name: this.props.common.metricLabels[v],
                 data: [],
+                yAxis: k,
                 uid: v,
             };
-            config.series.push(seriesObj)
+            config.series.push(seriesObj);
+            config.yAxis.push({
+                title: {
+                    text: this.props.common.metricLabels[v],
+                },
+                opposite: k > 0,
+            });
         });
-console.log(config.series);
+
         this.props.data.table.rows.forEach((v,k) => {
             dt = v.iso_date;
             y = dt.substr(0,4);
@@ -125,6 +133,7 @@ console.log(config.series);
                     text: 'VitoStats'
                 },
                 series: [],
+                yAxis: [],
                 xAxis: {
                     type: 'datetime',
                     dateTimeLabelFormats: {

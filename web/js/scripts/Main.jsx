@@ -8,6 +8,8 @@ import VitoNav from './VitoNav.jsx';
 import Spinner from './Spinner.jsx';
 import DialogBox from './DialogBox.jsx';
 
+const maxMetrics = 4;
+
 export default class Vito extends React.Component {
     constructor(props) {
         super(props);
@@ -94,6 +96,11 @@ export default class Vito extends React.Component {
         } else {
             metrics.push(metric);
         }
+
+        if (metrics.length > maxMetrics) {
+            metrics.shift();
+        }
+
         this.setState({makeApiCall: false, selectedChartMetrics: metrics, refreshChart: true});
     }
 
