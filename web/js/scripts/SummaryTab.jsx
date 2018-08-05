@@ -83,8 +83,8 @@ export default class SummaryTab extends React.Component {
     render() {
         return (
             <div>
-                <CommonTable data={this.props.common.data} rowClick={this.rowClick} />
                 <VitoChart data={this.props.common.data} common={this.props.common} />
+                <CommonTable data={this.props.common.data} rowClick={this.rowClick} />
             </div>
         );
     }

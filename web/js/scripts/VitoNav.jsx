@@ -10,10 +10,10 @@ export default class VitoNav extends React.Component {
         var chartNav = this.props.common.view === 'summary' ? <ChartMetricSelect common={this.props.common} /> : '';
         return (
             <div>
+                {chartNav}
                 <ViewNav common={this.props.common} />
                 <PersonSelect common={this.props.common} />
                 {aggNav}
-                {chartNav}
             </div>
         );
     }
