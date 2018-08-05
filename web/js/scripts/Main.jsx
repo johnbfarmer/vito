@@ -87,7 +87,14 @@ export default class Vito extends React.Component {
     updateSelectedChartMetrics(e) {
         var dataset = e.target.dataset;
         var metric = dataset.metric;
-        this.setState({makeApiCall: false, selectedChartMetrics: [metric], refreshChart: true});
+        var metrics = this.state.selectedChartMetrics;
+        var pos = metrics.indexOf(metric);
+        if (pos >= 0) {
+            metrics.splice(pos, 1);
+        } else {
+            metrics.push(metric);
+        }
+        this.setState({makeApiCall: false, selectedChartMetrics: metrics, refreshChart: true});
     }
 
     updateAvailableChartMetrics(m) {

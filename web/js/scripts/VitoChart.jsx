@@ -73,45 +73,50 @@ export default class VitoChart extends React.Component {
             selectedMetrics.push(metrics[0]);
         }
 
-
-
-        config.series = [{
-            name: this.props.common.metricLabels[selectedMetrics[0]],
-            data: [],
-        }];
-        if (selectedMetrics[0] === 'bp') {
-            config.series[0].name = 'systolic';
-            config.series.push({
-                name: 'diastolic',
+        var seriesObj = {};
+        selectedMetrics.forEach((v, k) => {
+            if (v === 'bp') {
+                v = 'diastolic';
+                config.series.push({
+                    name: 'Systolic',
+                    data: [],
+                    uid: 'systolic',
+                });
+            }
+            seriesObj = {
+                name: this.props.common.metricLabels[v],
                 data: [],
-            });
-        }
-
+                uid: v,
+            };
+            config.series.push(seriesObj)
+        });
+console.log(config.series);
         this.props.data.table.rows.forEach((v,k) => {
             dt = v.iso_date;
             y = dt.substr(0,4);
             m = parseInt(dt.substr(5,2)) - 1;
             d = parseInt(dt.substr(8,2)) - 1;
             xVal = Date.UTC(y, m, d);
-            selectedMetrics.forEach((metricName, metricKey) => {
-                if (metricName === 'bp') {
-                    if (v[metricName]) {
-                        var vals = v[metricName].split('/');
-                        config.series[0].data.unshift([xVal, parseInt(vals[0])]); // how to do properly?
-                        config.series[1].data.unshift([xVal, parseInt(vals[1])]);
+            config.series.forEach((seriesObj, seriesKey) => {
+                var metricName = seriesObj.name;
+                if (metricName === 'Systolic' || metricName === 'Diastolic') {
+                    if (v['bp']) {
+                        var vals = v['bp'].split('/');
+                        var idx = metricName === 'Systolic' ? 0 : 1;
+                        yVal = parseInt(vals[idx]);
+                    } else {
+                        yVal = NaN;
                     }
                 } else {
-                    yVal = parseFloat(v[metricName]);
-                    config.series[metricKey].data.unshift([xVal, yVal]);
+                    yVal = parseFloat(v[seriesObj.uid]);
                 }
+
+                config.series[seriesKey].data.unshift([xVal, yVal]);
             });
         });
 
         this.state.config = config;
-        // this.props.common.updateAvailableChartMetrics(metrics);
-        // this.props.common.updateNewData(false);
         this.props.common.updateState({refreshChart: false, makeApiCall: false, availableChartMetrics: metrics, selectedChartMetrics: selectedMetrics});
-console.log({refreshChart: false, makeApiCall: false, availableChartMetrics: metrics, selectedChartMetrics: selectedMetrics});
     }
 
     defaultConfig() {
@@ -119,10 +124,7 @@ console.log({refreshChart: false, makeApiCall: false, availableChartMetrics: met
                 title: {
                     text: 'VitoStats'
                 },
-                series: [{
-                    name: '',
-                    data: [],
-                }],
+                series: [],
                 xAxis: {
                     type: 'datetime',
                     dateTimeLabelFormats: {

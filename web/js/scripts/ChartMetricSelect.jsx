@@ -3,7 +3,8 @@ import React from 'react';
 export default class ChartMetricSelect extends React.Component {
     render() {
         var metrics = this.props.common.availableChartMetrics.map((metric, idx) => {
-            var isSelected = metric === this.props.common.selectedChartMetrics[0];
+            var isSelected = this.props.common.selectedChartMetrics.indexOf(metric) >= 0;
+            // var isSelected = metric === this.props.common.selectedChartMetrics[0];
             return <ChartMetricSelectItem 
                     metric={metric}
                     key={'m_' + idx}
