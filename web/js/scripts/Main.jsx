@@ -10,6 +10,22 @@ import DialogBox from './DialogBox.jsx';
 
 const maxMetrics = 4;
 
+const metricLabels = {
+    'distance': 'Distance',
+    'distance_run': 'Distance Run',
+    'steps': 'Steps',
+    'stepsPerKm': 'Steps/Km',
+    'sleep': 'Sleep',
+    'weight': 'Weight',
+    'abdominals': 'Abdominals',
+    'systolic': 'Systolic',
+    'diastolic': 'Diastolic',
+    'bp': 'Blood Pressure',
+    'pulse': 'Pulse',
+    'alcohol': 'Alcohol',
+    'tobacco': 'Tobacco',
+};
+
 export default class Vito extends React.Component {
     constructor(props) {
         super(props);
@@ -30,22 +46,6 @@ export default class Vito extends React.Component {
             data: {},
             refreshChart: false,
             loading: true,
-        };
-
-        this.metricLabels = {
-            'distance': 'Distance',
-            'distance_run': 'Distance Run',
-            'steps': 'Steps',
-            'stepsPerKm': 'Steps/Km',
-            'sleep': 'Sleep',
-            'weight': 'Weight',
-            'abdominals': 'Abdominals',
-            'systolic': 'Systolic',
-            'diastolic': 'Diastolic',
-            'bp': 'Blood Pressure',
-            'pulse': 'Pulse',
-            'alcohol': 'Alcohol',
-            'tobacco': 'Tobacco',
         };
 
         this.updatePerson = this.updatePerson.bind(this);
@@ -150,7 +150,7 @@ export default class Vito extends React.Component {
             useAgg: this.state.view === 'summary',
             makeApiCall: this.state.makeApiCall,
             updateState: this.updateState,
-            metricLabels: this.metricLabels,
+            metricLabels: metricLabels,
         };
     }
 
