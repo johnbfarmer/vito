@@ -82,7 +82,8 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
         $id = $agg === 'months' ? 'CONCAT("ym_", YEAR(v.date), LPAD(MONTH(v.date),2,0))' : 'CONCAT("yw_", YEARWEEK(v.date, 3))';
         $dateStart = !empty($dates['start']) ? $dates['start'] : null;
         $dateEnd = !empty($dates['end']) ? $dates['end'] : null;
-        $limit = $agg === 'months' ? 12 : 13;
+        $limit = 50;
+        // $limit = $agg === 'months' ? 12 : 13;
 
         $sql = '
         SELECT 

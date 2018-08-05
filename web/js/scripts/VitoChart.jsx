@@ -73,24 +73,12 @@ export default class VitoChart extends React.Component {
             selectedMetrics.push(metrics[0]);
         }
 
-        var seriesObj = {};
         selectedMetrics.forEach((v, k) => {
             if (v === 'bp') {
                 v = 'diastolic';
-                config.series.push({
-                    name: 'Systolic',
-                    data: [],
-                    yAxis: k,
-                    uid: 'systolic',
-                });
+                config.series.push(this.defaultSeriesObj('systolic', k));
             }
-            seriesObj = {
-                name: this.props.common.metricLabels[v],
-                data: [],
-                yAxis: k,
-                uid: v,
-            };
-            config.series.push(seriesObj);
+            config.series.push(this.defaultSeriesObj(v, k));
             config.yAxis.push({
                 title: {
                     text: this.props.common.metricLabels[v],
@@ -125,6 +113,19 @@ export default class VitoChart extends React.Component {
 
         this.state.config = config;
         this.props.common.updateState({refreshChart: false, makeApiCall: false, availableChartMetrics: metrics, selectedChartMetrics: selectedMetrics});
+    }
+
+    defaultSeriesObj(uid, yAxisIdx) {
+        return {
+            name: this.props.common.metricLabels[uid],
+            data: [],
+            yAxis: yAxisIdx,
+            type: 'spline',
+            marker: {
+                enabled: false
+            },
+            uid: uid,
+        };
     }
 
     defaultConfig() {
