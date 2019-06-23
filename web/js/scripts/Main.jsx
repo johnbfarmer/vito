@@ -22,19 +22,18 @@ const metricLabels = {
     'diastolic': 'Diastolic',
     'bp': 'Blood Pressure',
     'pulse': 'Pulse',
-    'alcohol': 'Alcohol',
-    'tobacco': 'Tobacco',
+    'za': 'ZA',
+    // 'tobacco': 'Tobacco',
 };
 
 export default class Vito extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dateStart: null,
-            dateEnd: null,
+            numUnits: 6,
             personId: 0,
             recordId: 0,
-            people: [{id:1, name: 'John'},{id:2, name: 'Ian'},{id:3, name: 'Pily'}],
+            people: [{id:1, name: 'John'},{id:2, name: 'Ian'},{id:3, name: 'Pily'},{id:4, name: 'Choco'}],
             agg: 'months',
             selectedChartMetrics: ['distance_run'],
             availableChartMetrics: ['bp', 'weight'],
@@ -45,12 +44,13 @@ export default class Vito extends React.Component {
             makeApiCall: true,
             data: {},
             refreshChart: false,
+            showChart: false,
             loading: true,
         };
 
         this.updatePerson = this.updatePerson.bind(this);
         this.updateRecord = this.updateRecord.bind(this);
-        this.updateDateStart = this.updateDateStart.bind(this);
+        this.updateAggUnits = this.updateAggUnits.bind(this);
         this.updateAgg = this.updateAgg.bind(this);
         this.updateSelectedChartMetrics = this.updateSelectedChartMetrics.bind(this);
         this.updateAvailableChartMetrics = this.updateAvailableChartMetrics.bind(this);
@@ -75,9 +75,8 @@ export default class Vito extends React.Component {
         this.setState({makeApiCall: true, view: 'edit', recordId: id});
     }
 
-    updateDateStart(date) {
-        var d = typeof date === 'undefined' ? null : date.toISOString().substring(0,10);
-        this.setState({makeApiCall: true, dateStart: d});
+    updateAggUnits(n) {
+        this.setState({makeApiCall: true, numUnits: n});
     }
 
     updateAgg(e) {
@@ -130,12 +129,12 @@ export default class Vito extends React.Component {
         return {
             personId: this.state.personId,
             recordId: this.state.recordId,
-            dateStart: this.state.dateStart,
+            numUnits: this.state.numUnits,
             data: this.state.data,
             people: this.state.people,
             updatePerson: this.updatePerson,
             updateRecord: this.updateRecord,
-            updateDateStart: this.updateDateStart,
+            updateAggUnits: this.updateAggUnits,
             agg: this.state.agg,
             updateAgg: this.updateAgg,
             refreshChart: this.state.refreshChart,
@@ -151,6 +150,7 @@ export default class Vito extends React.Component {
             makeApiCall: this.state.makeApiCall,
             updateState: this.updateState,
             metricLabels: metricLabels,
+            showChart: this.state.showChart,
         };
     }
 
@@ -190,6 +190,7 @@ export default class Vito extends React.Component {
 
     render() {
         var common = this.common();
+console.log(common)
         var viewTag = this.getViewTag();
         return (
             <div>

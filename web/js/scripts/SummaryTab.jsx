@@ -39,13 +39,10 @@ export default class SummaryTab extends React.Component {
     handleData() {
         var id = this.props.common.personId || 1;
         this.loading(true);
-        var url = 'vito/' + this.state.agg + '/' + id;
+        var url = 'vito/' + id + '/' + this.state.agg + '/' + this.props.common.numUnits;
         var qs = '';
         if (this.state.agg === 'days') {
             qs = '?dateRangeId=' + this.state.dateRangeId + '&dateRangeType=' + this.state.dateRangeType;
-        }
-        if (this.props.common.dateStart !== null && qs.length === 0) {
-            qs = qs + '?dateStart=' + this.props.common.dateStart;
         }
         url = url + qs;
         fetch(url)

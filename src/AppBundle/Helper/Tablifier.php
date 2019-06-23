@@ -114,9 +114,10 @@ class Tablifier
             // 'diastolic' => 'Diastolic',
             'bp' => 'Blood Pressure',
             'pulse' => 'Pulse',
-            'alcohol' => 'Alcohol',
-            'tobacco' => 'Tobacco',
-            'comments' => 'Comments',
+            'za' => 'ZA',
+            // 'alcohol' => 'Alcohol',
+            // 'tobacco' => 'Tobacco',
+            // 'comments' => 'Comments',
         ];
     }
 

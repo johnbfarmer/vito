@@ -92,3 +92,11 @@
 .top-margin-30 {
     margin-top: 30px;
 }
+
+.float-right {
+    float: right;
+}
+
+.no-wrap {
+    white-space: nowrap;
+}

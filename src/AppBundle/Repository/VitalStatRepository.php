@@ -50,6 +50,7 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
             steps,
             IFNULL(steps / distance, 0) AS stepsPerKm,
             alcohol,
+            za,
             tobacco,
             pulse,
             weight,
@@ -75,14 +76,14 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
         return $records;
     }
 
-    public function yearlySummary($personId, $agg, $dates = null, $year = null)
+    public function yearlySummary($personId, $agg, $limit = 50)
     {
         $dt = $agg === 'months' ? 'CONCAT(MONTHNAME(v.date), ", ", YEAR(v.date))' : 'YEARWEEK(v.date, 3)';
         $key = $agg === 'months' ? 'CONCAT(YEAR(v.date), LPAD(MONTH(v.date),2,0))' : 'YEARWEEK(v.date, 3)';
         $id = $agg === 'months' ? 'CONCAT("ym_", YEAR(v.date), LPAD(MONTH(v.date),2,0))' : 'CONCAT("yw_", YEARWEEK(v.date, 3))';
-        $dateStart = !empty($dates['start']) ? $dates['start'] : null;
-        $dateEnd = !empty($dates['end']) ? $dates['end'] : null;
-        $limit = 50;
+        // $dateStart = !empty($dates['start']) ? $dates['start'] : null;
+        // $dateEnd = !empty($dates['end']) ? $dates['end'] : null;
+        // $limit = 50;
         // $limit = $agg === 'months' ? 12 : 13;
 
         $sql = '
@@ -94,6 +95,7 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
             ROUND(SUM(`steps`)) AS steps,
             IFNULL(ROUND(AVG(`steps`)/AVG(`distance`), 2), 0) AS stepsPerKm,
             ROUND(AVG(`alcohol`),1) AS alcohol,
+            ROUND(AVG(`za`),2) AS za,
             ROUND(AVG(`tobacco`),1) AS tobacco,
             ROUND(AVG(`pulse`)) AS pulse,
             ROUND(AVG(`weight`),1) AS weight,
@@ -106,11 +108,11 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
         FROM vital_stats v
         INNER JOIN people p ON v.person_id = p.id
         WHERE p.id = :personId';
-        $sql .= $this->whereDateRange($dates);
-        if (!empty($year)) {
-            $sql .= '
-            AND YEAR(v.date) = :year';
-        }
+        // $sql .= $this->whereDateRange($dates);
+        // if (!empty($year)) {
+        //     $sql .= '
+        //     AND YEAR(v.date) = :year';
+        // }
         $sql .= '
         GROUP BY ' . $key . '
         ORDER BY ' . $key . ' DESC
@@ -118,9 +120,9 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':personId', $personId, \PDO::PARAM_STR);
-        if (!empty($year)) {
-            $stmt->bindValue(':year', $year, \PDO::PARAM_STR);
-        }
+        // if (!empty($year)) {
+        //     $stmt->bindValue(':year', $year, \PDO::PARAM_STR);
+        // }
         $stmt->execute();
         $records = $stmt->fetchAll();
         return $records;
@@ -130,7 +132,7 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
     {
         $where = $personId ? 'WHERE p.id = ' . $personId : '';
         $sql = '
-        SELECT v.id, `date`, p.`name`, `distance`, `distance_run`, `steps`, `sleep`, `weight`, `abdominals`, CONCAT(`systolic`, "/", `diastolic`) AS `bp`, `pulse`, `alcohol`, `tobacco`, `comments`
+        SELECT v.id, `date`, p.`name`, `distance`, `distance_run`, `steps`, `sleep`, `weight`, `abdominals`, CONCAT(`systolic`, "/", `diastolic`) AS `bp`, `pulse`, `alcohol`, `za`, `tobacco`, `comments`
         FROM vital_stats v
         INNER JOIN people p ON v.person_id = p.id
         ' . $where . '

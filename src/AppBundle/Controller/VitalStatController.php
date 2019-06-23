@@ -274,10 +274,10 @@ class VitalStatController extends Controller
     }
 
     /**
-     * @Route("/{agg}/{personId}", name="summary", requirements={"agg" ="months|days|weeks"})
+     * @Route("/{personId}/{agg}/{numUnits}", name="summary", requirements={"agg"="months|days|weeks"})
      * @Method("GET")
      */
-    public function summaryAction(Request $request, $agg, $personId)
+    public function summaryAction(Request $request, $agg, $personId, $numUnits)
     {
         $statRepo = $this->getDoctrine()->getManager()->getRepository('AppBundle:VitalStat');
         $personRepo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Person');
@@ -289,10 +289,10 @@ class VitalStatController extends Controller
         ];
         switch ($agg) {
             case 'months':
-                $vitalStats = $statRepo->yearlySummary($personId, 'months', $dates);
+                $vitalStats = $statRepo->yearlySummary($personId, 'months', $numUnits);
                 break;
             case 'weeks':
-                $vitalStats = $statRepo->yearlySummary($personId, 'weeks', $dates);
+                $vitalStats = $statRepo->yearlySummary($personId, 'weeks', $numUnits);
                 break;
             case 'days':
                 $dateRangeType = $request->query->get('dateRangeType');

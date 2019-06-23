@@ -32,8 +32,9 @@ class GenericHelper
             'abdominals' => 'Abdominals',
             'weight' => 'Weight',
             'sleep' => 'Sleep',
-            'alcohol' => 'Alcohol',
-            'tobacco' => 'Tobacco',
+            'za' => 'ZA',
+            // 'alcohol' => 'Alcohol',
+            // 'tobacco' => 'Tobacco',
             'bp' => 'BP',
             'pulse' => 'Pulse',
         ];

@@ -75,6 +75,11 @@ class VitalStat
     private $pulse;
 
     /**
+     * @ORM\Column(name="za", type="boolean")
+     */
+    private $za;
+
+    /**
      * @ORM\Column(name="alcohol", type="decimal", precision=1, scale=3, nullable=true)
      */
     private $alcohol;
@@ -236,6 +241,18 @@ class VitalStat
     public function setAlcohol($alcohol)
     {
         $this->alcohol = $alcohol;
+
+        return $this;
+    }
+
+    public function getZa()
+    {
+        return $this->za;
+    }
+
+    public function setZa($za)
+    {
+        $this->za = $za;
 
         return $this;
     }

@@ -146,11 +146,24 @@ export default class VitoChart extends React.Component {
     }
 
     render() {
-        return (
-            <div>
+        let chart = 
+            this.props.common.showChart
+            ? (
                 <div id="vito-chart">
                     <ReactHighcharts config={this.state.config} ref="chart"></ReactHighcharts>;
                 </div>
+            )
+            : ''
+        let symbol = this.props.common.showChart ? '-' : '+'
+        return (
+            <div>
+                <span
+                    className="float-right pointer"
+                    onClick={() => this.props.common.updateState({showChart: !this.props.common.showChart, refreshChart: true})}
+                >
+                    {symbol}
+                </span>
+                {chart}
             </div>
         );
     }
