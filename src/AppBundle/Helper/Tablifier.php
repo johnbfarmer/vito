@@ -8,13 +8,15 @@ class Tablifier
         $data = [],
         $cols = [],
         $rows = [],
+        $total = [],
         $colConfig = [],
         $hiddenCols = ['iso_date', 'id'],
         $table = [];
 
-    public function __construct($data, $limitCols)
+    public function __construct($data, $limitCols, $total)
     {
         $this->data = $data;
+        $this->total = $total;
         $this->colConfig = $this->getColConfig();
         $this->getLimitedCols($limitCols);
     }
@@ -27,6 +29,7 @@ class Tablifier
             'table' => [
                 'columns' => $this->cols,
                 'rows' => $this->rows,
+                'total' => $this->total,
             ]
         ];
     }
@@ -71,10 +74,10 @@ class Tablifier
         }
     } 
 
-    public static function tablify($vars, $limitCols) 
+    public static function tablify($vars, $limitCols, $total) 
     {
         $className = get_called_class();
-        $class = new $className($vars, $limitCols);
+        $class = new $className($vars, $limitCols, $total);
         $class->execute();
         return $class;
     }

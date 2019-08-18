@@ -269,7 +269,7 @@ class VitalStatController extends Controller
         $em = $this->getDoctrine()->getManager();
         $vitalStats = $em->getRepository('AppBundle:VitalStat')->recent($personId, 10);
         $fields = $personId ? $em->getRepository('AppBundle:Person')->find($personId)->getFields() : null;
-        $tablifier = Tablifier::tablify($vitalStats, $fields);
+        $tablifier = Tablifier::tablify($vitalStats, $fields, []);
         return new JsonResponse($tablifier->getTable());
     }
 
@@ -295,14 +295,19 @@ class VitalStatController extends Controller
                 $vitalStats = $statRepo->yearlySummary($personId, 'weeks', $numUnits);
                 break;
             case 'days':
-                $dateRangeType = $request->query->get('dateRangeType');
-                $dateRangeId = $request->query->get('dateRangeId');
-                $dates = $dateRangeType === 'ym' ? GenericHelper::yearMonthEndpoints($dateRangeId) : GenericHelper::yearWeekEndpoints($dateRangeId);
-                $vitalStats = $statRepo->days($personId, $dates['start'], $dates['end']);
+                if (!$request->query->has('dateRangeId')) {
+                    $vitalStats = $statRepo->yearlySummary($personId, 'days', $numUnits);
+                } else {
+                    $dateRangeType = $request->query->get('dateRangeType');
+                    $dateRangeId = $request->query->get('dateRangeId');
+                    $dates = $dateRangeType === 'ym' ? GenericHelper::yearMonthEndpoints($dateRangeId) : GenericHelper::yearWeekEndpoints($dateRangeId);
+                    $vitalStats = $statRepo->days($personId, $dates['start'], $dates['end']);
+                }
         }
 
         $fields = $personId ? $personRepo->find($personId)->getFields() : null;
-        $tablifier = Tablifier::tablify($vitalStats, $fields);
+        $total = $records['total'] = $statRepo->summaryTotal($personId, $agg, $numUnits);
+        $tablifier = Tablifier::tablify($vitalStats, $fields, $total);
         return new JsonResponse($tablifier->getTable());
     }
 }

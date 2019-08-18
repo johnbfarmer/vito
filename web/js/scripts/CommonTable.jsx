@@ -22,7 +22,7 @@ export default class CommonTable extends React.Component {
         }, this);
         return (
             <div>
-                <table className="table-striped table-bordered summary-table">
+                <table className="table-striped table-bordered summary-table full-width">
                     <thead>
                         <CommonTableHeader data={this.state.columns} />
                     </thead>

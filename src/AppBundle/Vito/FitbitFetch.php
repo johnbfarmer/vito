@@ -17,6 +17,7 @@ class FitbitFetch extends BaseProcess
     {
         $date = $this->parameters['date'];
         $days = $this->parameters['days'];
+        $this->personId = $this->parameters['personId'];
         while (--$days >= 0) {
             $this->token = $this->getToken();
             try {

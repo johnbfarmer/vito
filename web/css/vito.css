@@ -100,3 +100,16 @@
 .no-wrap {
     white-space: nowrap;
 }
+
+.chart-container {
+    text-align: right;
+    width: 100%;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.chart-type-selector {
+    padding-left: 3px;
+}

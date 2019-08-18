@@ -1,5 +1,4 @@
 import React from 'react';
-import 'react-day-picker/lib/style.css';
 
 export default class AggNav extends React.Component {
     constructor(props) {
@@ -7,8 +6,38 @@ export default class AggNav extends React.Component {
         this.state = {units: 6}
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            units: nextProps.numberOfDateUnits
+        })
+    }
+
+    getNumUnitsOptions(agg) {
+        var numUnits = 36
+        switch(agg) {
+            case 'days':
+                numUnits = 90
+                break
+            case 'weeks':
+                numUnits = 70
+                break
+            default:
+                numUnits = 36
+                break
+        }
+
+        var foo = new Array(numUnits)
+
+        for (var i = 0; i < foo.length; i++){
+            foo[i] = i + 1
+        }
+
+        return foo
+    }
+
     render() {
-        let unitChoices = [2,3,4,5,6,7,8,9,10,11,12,18,24,36].map((v) => {
+        let unitChoicesByAgg = this.getNumUnitsOptions(this.props.common.agg)
+        let unitChoices = unitChoicesByAgg.map((v) => {
             return (
                 <option value={v} key={"opt_" + v}>{v}</option>
             )
@@ -21,6 +50,9 @@ export default class AggNav extends React.Component {
                 <div onClick={this.props.common.updateAgg} className='pointer' data-agg='weeks'>
                     by week
                 </div>
+                <div onClick={this.props.common.updateAgg} className='pointer' data-agg='days'>
+                    by day
+                </div>
                 <div className="no-wrap">
                     Show
                     <select
@@ -29,7 +61,7 @@ export default class AggNav extends React.Component {
                             this.setState({units: n})
                             this.props.common.updateAggUnits(n)
                         }}
-                        value={this.state.units}
+                        value={this.props.numberOfDateUnits}
                     >
                         {unitChoices}
                     </select>

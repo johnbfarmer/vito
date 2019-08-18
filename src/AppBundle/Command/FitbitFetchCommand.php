@@ -24,7 +24,8 @@ class FitbitFetchCommand extends ContainerAwareCommand
             ->setDescription('query the api and import')
             ->setHelp('tbi')
             ->addArgument('date', InputArgument::OPTIONAL, '')
-            ->addOption('days', 'd', InputOption::VALUE_REQUIRED, 'number of days to go back', 1);
+            ->addOption('days', 'd', InputOption::VALUE_REQUIRED, 'number of days to go back', 1)
+            ->addOption('personId', 'p', InputOption::VALUE_REQUIRED, 'dbid of the person (default is 1)', 1);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

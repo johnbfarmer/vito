@@ -9,10 +9,10 @@ export default class SummaryTab extends React.Component {
         this.state = {
             data: props.common.data,
             agg: 'months',
-            dateRangeId: '201801',
+            dateRangeId: null,
             dateRangeType: 'ym',
         };
-
+console.log(props)
         this.busy = true;
         this.makeApiCall = true;
         this.handleData = this.handleData.bind(this);
@@ -39,9 +39,9 @@ export default class SummaryTab extends React.Component {
     handleData() {
         var id = this.props.common.personId || 1;
         this.loading(true);
-        var url = 'vito/' + id + '/' + this.state.agg + '/' + this.props.common.numUnits;
+        var url = 'vito/' + id + '/' + this.state.agg + '/' + this.props.common.numberOfDateUnits;
         var qs = '';
-        if (this.state.agg === 'days') {
+        if (this.state.agg === 'days' && this.state.dateRangeId) {
             qs = '?dateRangeId=' + this.state.dateRangeId + '&dateRangeType=' + this.state.dateRangeType;
         }
         url = url + qs;
@@ -50,7 +50,7 @@ export default class SummaryTab extends React.Component {
                 return resp.json();
         }).then(resp => {
             if (resp.table.rows.length > 0) {
-                this.props.common.updateState({personId:id, data: {table:{rows:resp.table.rows, columns:resp.table.columns}}, refreshChart: true});
+                this.props.common.updateState({personId:id, data: {table:{rows:resp.table.rows, columns:resp.table.columns, total:resp.table.total}}, refreshChart: true});
             }
             this.loading(false);
         });

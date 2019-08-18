@@ -1,10 +1,12 @@
 import React from 'react';
 var ReactHighcharts = require('react-highcharts');
 import ChartMetricSelect from './ChartMetricSelect.jsx';
+import ChartTypeSelect from './ChartTypeSelect.jsx';
 
 export default class VitoChart extends React.Component {
     constructor(props) {
         super(props);
+        this.handleChartTypeSelection = this.handleChartTypeSelection.bind(this)
         this.state = {
             selectedMetrics: ['weight'],
             config: {
@@ -89,10 +91,11 @@ export default class VitoChart extends React.Component {
 
         this.props.data.table.rows.forEach((v,k) => {
             dt = v.iso_date;
+console.log(v)
             y = dt.substr(0,4);
             m = parseInt(dt.substr(5,2)) - 1;
             d = parseInt(dt.substr(8,2)) - 1;
-            xVal = Date.UTC(y, m, d);
+            xVal = Date.UTC(y, m, d+1);
             config.series.forEach((seriesObj, seriesKey) => {
                 var metricName = seriesObj.name;
                 if (metricName === 'Systolic' || metricName === 'Diastolic') {
@@ -120,7 +123,7 @@ export default class VitoChart extends React.Component {
             name: this.props.common.metricLabels[uid],
             data: [],
             yAxis: yAxisIdx,
-            type: 'spline',
+            type: this.props.common.chartType,
             marker: {
                 enabled: false
             },
@@ -145,7 +148,16 @@ export default class VitoChart extends React.Component {
             };
     }
 
+    handleChartTypeSelection(chartType) {
+        this.props.common.updateState({
+            showChart: chartType !== '',
+            chartType: chartType,
+            refreshChart: true
+        })
+    }
+
     render() {
+        console.log(this.state.config.series[0].data)
         let chart = 
             this.props.common.showChart
             ? (
@@ -154,15 +166,12 @@ export default class VitoChart extends React.Component {
                 </div>
             )
             : ''
-        let symbol = this.props.common.showChart ? '-' : '+'
+
+        let chartTypeSelect = <ChartTypeSelect chartType={this.props.common.showChart} handleSelect={this.handleChartTypeSelection}/>
+
         return (
-            <div>
-                <span
-                    className="float-right pointer"
-                    onClick={() => this.props.common.updateState({showChart: !this.props.common.showChart, refreshChart: true})}
-                >
-                    {symbol}
-                </span>
+            <div className="chart-container">
+                {chartTypeSelect}
                 {chart}
             </div>
         );

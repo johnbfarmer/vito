@@ -30,7 +30,7 @@ export default class Vito extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            numUnits: 6,
+            numberOfDateUnits: 6,
             personId: 0,
             recordId: 0,
             people: [{id:1, name: 'John'},{id:2, name: 'Ian'},{id:3, name: 'Pily'},{id:4, name: 'Choco'}],
@@ -45,6 +45,7 @@ export default class Vito extends React.Component {
             data: {},
             refreshChart: false,
             showChart: false,
+            chartType: '',
             loading: true,
         };
 
@@ -76,13 +77,24 @@ export default class Vito extends React.Component {
     }
 
     updateAggUnits(n) {
-        this.setState({makeApiCall: true, numUnits: n});
+        this.setState({makeApiCall: true, numberOfDateUnits: n});
     }
 
     updateAgg(e) {
         var dataset = e.target.dataset;
         var agg = dataset.agg;
-        this.setState({makeApiCall: true, agg: agg});
+        var numUnits = this.state.numberOfDateUnits
+        switch(agg) {
+            case 'weeks':
+                numUnits = 26
+                break
+            case 'days':
+                numUnits = 40
+                break
+            default:
+                numUnits = 6
+        }
+        this.setState({makeApiCall: true, agg: agg, numberOfDateUnits: numUnits});
     }
 
     updateSelectedChartMetrics(e) {
@@ -129,7 +141,7 @@ export default class Vito extends React.Component {
         return {
             personId: this.state.personId,
             recordId: this.state.recordId,
-            numUnits: this.state.numUnits,
+            numberOfDateUnits: this.state.numberOfDateUnits,
             data: this.state.data,
             people: this.state.people,
             updatePerson: this.updatePerson,
@@ -151,6 +163,7 @@ export default class Vito extends React.Component {
             updateState: this.updateState,
             metricLabels: metricLabels,
             showChart: this.state.showChart,
+            chartType: this.state.chartType,
         };
     }
 
@@ -190,14 +203,13 @@ export default class Vito extends React.Component {
 
     render() {
         var common = this.common();
-console.log(common)
         var viewTag = this.getViewTag();
         return (
             <div>
-                <div className="col-md-1">
+                <div className="col-md-2">
                     <VitoNav common={common} />
                 </div>
-                <div className="col-md-11">
+                <div className="col-md-10">
                     {viewTag}
                 </div>
                 <Spinner show={this.state.loading} />

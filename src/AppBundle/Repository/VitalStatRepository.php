@@ -81,16 +81,43 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
         $dt = $agg === 'months' ? 'CONCAT(MONTHNAME(v.date), ", ", YEAR(v.date))' : 'YEARWEEK(v.date, 3)';
         $key = $agg === 'months' ? 'CONCAT(YEAR(v.date), LPAD(MONTH(v.date),2,0))' : 'YEARWEEK(v.date, 3)';
         $id = $agg === 'months' ? 'CONCAT("ym_", YEAR(v.date), LPAD(MONTH(v.date),2,0))' : 'CONCAT("yw_", YEARWEEK(v.date, 3))';
-        // $dateStart = !empty($dates['start']) ? $dates['start'] : null;
-        // $dateEnd = !empty($dates['end']) ? $dates['end'] : null;
-        // $limit = 50;
-        // $limit = $agg === 'months' ? 12 : 13;
+        if ($agg === 'days') {
+            $dt = 'v.date';
+            $key = 'v.date';
+            $id = 'v.date';
+        }
 
-        $sql = '
+        $sql = $this->summaryQuery($agg, $limit);
+        $conn = $this->getEntityManager()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':personId', $personId, \PDO::PARAM_STR);
+        $stmt->execute();
+        $records = $stmt->fetchAll();
+
+        return $records;
+    }
+
+    protected function getSummaryQueryPartsByAgg($agg)
+    {
+        $dt = $agg === 'months' ? 'CONCAT(MONTHNAME(v.date), ", ", YEAR(v.date))' : 'YEARWEEK(v.date, 3)';
+        $key = $agg === 'months' ? 'CONCAT(YEAR(v.date), LPAD(MONTH(v.date),2,0))' : 'YEARWEEK(v.date, 3)';
+        $id = $agg === 'months' ? 'CONCAT("ym_", YEAR(v.date), LPAD(MONTH(v.date),2,0))' : 'CONCAT("yw_", YEARWEEK(v.date, 3))';
+        if ($agg === 'days') {
+            $dt = 'v.date';
+            $key = 'v.date';
+            $id = 'v.date';
+        }
+
+        return [$key, $dt, $id];
+    }
+
+    protected function summaryQuery($agg, $limit) {
+        list($key, $dt, $id) = $this->getSummaryQueryPartsByAgg($agg);
+
+        return '
         SELECT 
             SUM(`distance_run`) AS distance_run,
             ROUND(SUM(`distance`), 1) AS distance,
-            -- CONCAT(FLOOR(AVG(`sleep`)/60), "h ", ROUND(AVG(`sleep`)%60), "m") AS sleep,
             ROUND(AVG(`sleep`), 2) AS sleep,
             ROUND(SUM(`steps`)) AS steps,
             IFNULL(ROUND(AVG(`steps`)/AVG(`distance`), 2), 0) AS stepsPerKm,
@@ -107,22 +134,38 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
             ' . $id . ' AS `id`
         FROM vital_stats v
         INNER JOIN people p ON v.person_id = p.id
-        WHERE p.id = :personId';
-        // $sql .= $this->whereDateRange($dates);
-        // if (!empty($year)) {
-        //     $sql .= '
-        //     AND YEAR(v.date) = :year';
-        // }
-        $sql .= '
+        WHERE p.id = :personId
         GROUP BY ' . $key . '
         ORDER BY ' . $key . ' DESC
-        LIMIT ' . $limit . ';';
+        LIMIT ' . $limit;
+    }
+
+    public function summaryTotal($personId, $agg, $limit)
+    {
+        $innerSql = $this->summaryQuery($agg, $limit);
+        $sql = '
+        SELECT 
+            SUM(`distance_run`) AS distance_run,
+            ROUND(SUM(`distance`), 1) AS distance,
+            ROUND(AVG(`sleep`), 2) AS sleep,
+            ROUND(SUM(`steps`)) AS steps,
+            IFNULL(ROUND(AVG(`steps`)/AVG(`distance`), 2), 0) AS stepsPerKm,
+            ROUND(AVG(`alcohol`),1) AS alcohol,
+            ROUND(AVG(`za`),2) AS za,
+            ROUND(AVG(`tobacco`),1) AS tobacco,
+            ROUND(AVG(`pulse`)) AS pulse,
+            ROUND(AVG(`weight`),1) AS weight,
+            -- CONCAT(ROUND(AVG(`systolic`)),"/",ROUND(AVG(`diastolic`))) AS bp,
+            ROUND(SUM(`abdominals`)) AS abdominals,
+            "total" AS `date`,
+            "total" AS `iso_date`,
+            "total" AS `ym`,
+            "total" AS `id`
+        FROM (' . $innerSql . '
+        ) T';
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':personId', $personId, \PDO::PARAM_STR);
-        // if (!empty($year)) {
-        //     $stmt->bindValue(':year', $year, \PDO::PARAM_STR);
-        // }
         $stmt->execute();
         $records = $stmt->fetchAll();
         return $records;
