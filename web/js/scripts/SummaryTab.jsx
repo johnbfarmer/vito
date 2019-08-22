@@ -12,7 +12,7 @@ export default class SummaryTab extends React.Component {
             dateRangeId: null,
             dateRangeType: 'ym',
         };
-console.log(props)
+
         this.busy = true;
         this.makeApiCall = true;
         this.handleData = this.handleData.bind(this);
@@ -81,7 +81,7 @@ console.log(props)
         return (
             <div>
                 <VitoChart data={this.props.common.data} common={this.props.common} />
-                <CommonTable data={this.props.common.data} rowClick={this.rowClick} />
+                <CommonTable data={this.props.common.data} rowClick={this.rowClick}/>
             </div>
         );
     }

@@ -5,14 +5,16 @@ export default class CommonTable extends React.Component {
         super(props);
         this.state = {
             rows: [],
-            columns: []
+            columns: [],
+            total: {},
         }
     }
 
-    componentWillUpdate(props) {
-        if ('table' in props.data) {
-            this.state.rows = props.data.table.rows;
-            this.state.columns = props.data.table.columns;
+    componentWillUpdate(nextProps) {
+        if ('table' in nextProps.data) {
+            this.state.rows = nextProps.data.table.rows;
+            this.state.columns = nextProps.data.table.columns;
+            this.state.total = nextProps.data.table.total || [];
         }
     }
 
@@ -20,6 +22,11 @@ export default class CommonTable extends React.Component {
         var tableRows = this.state.rows.map((row, idx) => {
             return <CommonTableRow row={row} key={idx} cols={this.state.columns} rowClick={this.props.rowClick} />
         }, this);
+        var total = null
+        if (this.state.total.date) {
+            total = <CommonTableTotalRow row={this.state.total} key={'23XYM.2'} cols={this.state.columns} />
+        }
+        
         return (
             <div>
                 <table className="table-striped table-bordered summary-table full-width">
@@ -28,6 +35,7 @@ export default class CommonTable extends React.Component {
                     </thead>
                     <tbody>
                         {tableRows}
+                        {total}
                     </tbody>
                 </table>
             </div>
@@ -50,6 +58,28 @@ export class CommonTableRow extends React.Component {
         var cls = 'pointer';
         return (
             <tr className={cls} onClick={this.props.rowClick} data-id={this.props.row.id}>
+                {row}
+            </tr>
+        );
+    }
+}
+
+export class CommonTableTotalRow extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        var row = this.props.cols.map((col, idx) => {
+            if (col.visible) {
+                var ttlVal = this.props.row[col.uid] || ''
+                return <td key={idx}>{ttlVal}</td>
+            }
+            return null;
+        }, this);
+        var cls = '';
+        return (
+            <tr className={cls}>
                 {row}
             </tr>
         );

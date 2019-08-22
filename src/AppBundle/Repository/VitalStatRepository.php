@@ -76,7 +76,7 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
         return $records;
     }
 
-    public function yearlySummary($personId, $agg, $limit = 50)
+    public function yearlySummary($personId, $agg, $limit = 50, $dates = [])
     {
         $dt = $agg === 'months' ? 'CONCAT(MONTHNAME(v.date), ", ", YEAR(v.date))' : 'YEARWEEK(v.date, 3)';
         $key = $agg === 'months' ? 'CONCAT(YEAR(v.date), LPAD(MONTH(v.date),2,0))' : 'YEARWEEK(v.date, 3)';
@@ -87,7 +87,7 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
             $id = 'v.date';
         }
 
-        $sql = $this->summaryQuery($agg, $limit);
+        $sql = $this->summaryQuery($agg, $limit, $dates);
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':personId', $personId, \PDO::PARAM_STR);
@@ -111,10 +111,54 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
         return [$key, $dt, $id];
     }
 
-    protected function summaryQuery($agg, $limit) {
+    protected function summaryQuery($agg, $limit, $dates = []) {
         list($key, $dt, $id) = $this->getSummaryQueryPartsByAgg($agg);
 
-        return '
+        $sql = '
+        SELECT 
+            SUM(`distance_run`) AS distance_run,
+            ROUND(SUM(`distance`), 1) AS distance,
+            ROUND(AVG(`sleep`), 2) AS sleep,
+            ROUND(SUM(`steps`)) AS steps,
+            IFNULL(ROUND(AVG(`steps`)/AVG(`distance`), 2), 0) AS stepsPerKm,
+            ROUND(AVG(`alcohol`),1) AS alcohol,
+            ROUND(AVG(`za`),2) AS za,
+            ROUND(AVG(`tobacco`),1) AS tobacco,
+            ROUND(AVG(`pulse`)) AS pulse,
+            ROUND(AVG(`weight`),1) AS weight,
+            ROUND(AVG(`systolic`)) AS systolic,
+            ROUND(AVG(`diastolic`)) AS diastolic,
+            CONCAT(ROUND(AVG(`systolic`)),"/",ROUND(AVG(`diastolic`))) AS bp,
+            ROUND(SUM(`abdominals`)) AS abdominals,
+            ' . $dt . ' AS `date`,
+            MIN(v.date) AS `iso_date`,
+            CONCAT(YEAR(v.date), LPAD(MONTH(v.date),2,0)) as `ym`,
+            ' . $id . ' AS `id`
+        FROM vital_stats v
+        INNER JOIN people p ON v.person_id = p.id
+        WHERE p.id = :personId ';
+        if (!empty($dates['start'])) {
+            $sql .= '
+            AND `date` BETWEEN "' . $dates['start'] . '" AND "' . $dates['end'] . '"';
+        }
+
+        $sql .= '
+        GROUP BY ' . $key . '
+        ORDER BY ' . $key . ' DESC';
+
+        if (empty($dates['start'])) {
+            $sql .= '
+        LIMIT ' . $limit;
+        }
+
+        return $sql;
+    }
+
+    public function summaryTotal($personId, $agg, $limit, $dates = [])
+    {
+        
+        $innerSql = $this->summaryQuery($agg, $limit, $dates);
+        $sql = '
         SELECT 
             SUM(`distance_run`) AS distance_run,
             ROUND(SUM(`distance`), 1) AS distance,
@@ -128,35 +172,6 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
             ROUND(AVG(`weight`),1) AS weight,
             CONCAT(ROUND(AVG(`systolic`)),"/",ROUND(AVG(`diastolic`))) AS bp,
             ROUND(SUM(`abdominals`)) AS abdominals,
-            ' . $dt . ' AS `date`,
-            MIN(v.date) AS `iso_date`,
-            CONCAT(YEAR(v.date), LPAD(MONTH(v.date),2,0)) as `ym`,
-            ' . $id . ' AS `id`
-        FROM vital_stats v
-        INNER JOIN people p ON v.person_id = p.id
-        WHERE p.id = :personId
-        GROUP BY ' . $key . '
-        ORDER BY ' . $key . ' DESC
-        LIMIT ' . $limit;
-    }
-
-    public function summaryTotal($personId, $agg, $limit)
-    {
-        $innerSql = $this->summaryQuery($agg, $limit);
-        $sql = '
-        SELECT 
-            SUM(`distance_run`) AS distance_run,
-            ROUND(SUM(`distance`), 1) AS distance,
-            ROUND(AVG(`sleep`), 2) AS sleep,
-            ROUND(SUM(`steps`)) AS steps,
-            IFNULL(ROUND(AVG(`steps`)/AVG(`distance`), 2), 0) AS stepsPerKm,
-            ROUND(AVG(`alcohol`),1) AS alcohol,
-            ROUND(AVG(`za`),2) AS za,
-            ROUND(AVG(`tobacco`),1) AS tobacco,
-            ROUND(AVG(`pulse`)) AS pulse,
-            ROUND(AVG(`weight`),1) AS weight,
-            -- CONCAT(ROUND(AVG(`systolic`)),"/",ROUND(AVG(`diastolic`))) AS bp,
-            ROUND(SUM(`abdominals`)) AS abdominals,
             "total" AS `date`,
             "total" AS `iso_date`,
             "total" AS `ym`,
@@ -167,7 +182,7 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':personId', $personId, \PDO::PARAM_STR);
         $stmt->execute();
-        $records = $stmt->fetchAll();
+        $records = $stmt->fetch();
         return $records;
     }
 

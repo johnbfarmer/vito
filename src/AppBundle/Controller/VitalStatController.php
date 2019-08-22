@@ -306,7 +306,7 @@ class VitalStatController extends Controller
         }
 
         $fields = $personId ? $personRepo->find($personId)->getFields() : null;
-        $total = $records['total'] = $statRepo->summaryTotal($personId, $agg, $numUnits);
+        $total = $records['total'] = $statRepo->summaryTotal($personId, $agg, $numUnits, $dates);
         $tablifier = Tablifier::tablify($vitalStats, $fields, $total);
         return new JsonResponse($tablifier->getTable());
     }

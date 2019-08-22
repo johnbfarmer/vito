@@ -1,6 +1,5 @@
 import React from 'react';
 var ReactHighcharts = require('react-highcharts');
-import ChartMetricSelect from './ChartMetricSelect.jsx';
 import ChartTypeSelect from './ChartTypeSelect.jsx';
 
 export default class VitoChart extends React.Component {
@@ -91,7 +90,6 @@ export default class VitoChart extends React.Component {
 
         this.props.data.table.rows.forEach((v,k) => {
             dt = v.iso_date;
-console.log(v)
             y = dt.substr(0,4);
             m = parseInt(dt.substr(5,2)) - 1;
             d = parseInt(dt.substr(8,2)) - 1;
@@ -157,7 +155,6 @@ console.log(v)
     }
 
     render() {
-        console.log(this.state.config.series[0].data)
         let chart = 
             this.props.common.showChart
             ? (

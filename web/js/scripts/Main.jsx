@@ -86,10 +86,10 @@ export default class Vito extends React.Component {
         var numUnits = this.state.numberOfDateUnits
         switch(agg) {
             case 'weeks':
-                numUnits = 26
+                numUnits = 13
                 break
             case 'days':
-                numUnits = 40
+                numUnits = 20
                 break
             default:
                 numUnits = 6
@@ -97,10 +97,8 @@ export default class Vito extends React.Component {
         this.setState({makeApiCall: true, agg: agg, numberOfDateUnits: numUnits});
     }
 
-    updateSelectedChartMetrics(e) {
-        var dataset = e.target.dataset;
-        var metric = dataset.metric;
-        var metrics = this.state.selectedChartMetrics;
+    updateSelectedChartMetrics(metric, clearSelection = false) {
+        var metrics = clearSelection ? [] : this.state.selectedChartMetrics;
         var pos = metrics.indexOf(metric);
         if (pos >= 0) {
             metrics.splice(pos, 1);

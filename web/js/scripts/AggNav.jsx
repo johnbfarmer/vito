@@ -8,7 +8,7 @@ export default class AggNav extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            units: nextProps.numberOfDateUnits
+            units: nextProps.common.numberOfDateUnits
         })
     }
 
@@ -61,7 +61,7 @@ export default class AggNav extends React.Component {
                             this.setState({units: n})
                             this.props.common.updateAggUnits(n)
                         }}
-                        value={this.props.numberOfDateUnits}
+                        value={this.state.units}
                     >
                         {unitChoices}
                     </select>
