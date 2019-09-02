@@ -25,6 +25,7 @@ class FitbitFetchCommand extends ContainerAwareCommand
             ->setHelp('tbi')
             ->addArgument('date', InputArgument::OPTIONAL, '')
             ->addOption('days', 'd', InputOption::VALUE_REQUIRED, 'number of days to go back', 1)
+            ->addOption('update-db', 'u', InputOption::VALUE_REQUIRED, 'update the db (or store only)', 1)
             ->addOption('personId', 'p', InputOption::VALUE_REQUIRED, 'dbid of the person (default is 1)', 1);
     }
 

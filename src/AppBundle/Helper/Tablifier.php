@@ -118,6 +118,8 @@ class Tablifier
             'bp' => 'Blood Pressure',
             'pulse' => 'Pulse',
             'za' => 'ZA',
+            'floors' => 'Floors',
+            'very_active_minutes' => 'VAM',
             // 'alcohol' => 'Alcohol',
             // 'tobacco' => 'Tobacco',
             // 'comments' => 'Comments',

@@ -37,6 +37,8 @@ class GenericHelper
             // 'tobacco' => 'Tobacco',
             'bp' => 'BP',
             'pulse' => 'Pulse',
+            'floors' => 'Floors',
+            'very_active_minutes' => 'Very Active Minutes',
         ];
 
         if (empty($fields)) {

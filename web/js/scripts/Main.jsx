@@ -23,6 +23,8 @@ const metricLabels = {
     'bp': 'Blood Pressure',
     'pulse': 'Pulse',
     'za': 'ZA',
+    'very_active_minutes': 'VAM',
+    'floors': 'Floors',
     // 'tobacco': 'Tobacco',
 };
 
@@ -30,7 +32,7 @@ export default class Vito extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            numberOfDateUnits: 6,
+            numberOfDateUnits: 12,
             personId: 0,
             recordId: 0,
             people: [{id:1, name: 'John'},{id:2, name: 'Ian'},{id:3, name: 'Pily'},{id:4, name: 'Choco'}],
@@ -48,7 +50,7 @@ export default class Vito extends React.Component {
             chartType: '',
             loading: true,
         };
-
+console.log(metricLabels)
         this.updatePerson = this.updatePerson.bind(this);
         this.updateRecord = this.updateRecord.bind(this);
         this.updateAggUnits = this.updateAggUnits.bind(this);
@@ -92,7 +94,7 @@ export default class Vito extends React.Component {
                 numUnits = 20
                 break
             default:
-                numUnits = 6
+                numUnits = 12
         }
         this.setState({makeApiCall: true, agg: agg, numberOfDateUnits: numUnits});
     }

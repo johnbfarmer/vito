@@ -54,6 +54,8 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
             tobacco,
             pulse,
             weight,
+            floors,
+            very_active_minutes,
             CONCAT(systolic, "/", diastolic) AS bp,
             abdominals,
             `date`,
@@ -126,6 +128,8 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
             ROUND(AVG(`tobacco`),1) AS tobacco,
             ROUND(AVG(`pulse`)) AS pulse,
             ROUND(AVG(`weight`),1) AS weight,
+            ROUND(SUM(`floors`)) AS floors,
+            ROUND(SUM(`very_active_minutes`)) AS very_active_minutes,
             ROUND(AVG(`systolic`)) AS systolic,
             ROUND(AVG(`diastolic`)) AS diastolic,
             CONCAT(ROUND(AVG(`systolic`)),"/",ROUND(AVG(`diastolic`))) AS bp,
@@ -170,6 +174,8 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
             ROUND(AVG(`tobacco`),1) AS tobacco,
             ROUND(AVG(`pulse`)) AS pulse,
             ROUND(AVG(`weight`),1) AS weight,
+            ROUND(SUM(`floors`)) AS floors,
+            ROUND(SUM(`very_active_minutes`)) AS very_active_minutes,
             CONCAT(ROUND(AVG(`systolic`)),"/",ROUND(AVG(`diastolic`))) AS bp,
             ROUND(SUM(`abdominals`)) AS abdominals,
             "total" AS `date`,
@@ -190,7 +196,7 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
     {
         $where = $personId ? 'WHERE p.id = ' . $personId : '';
         $sql = '
-        SELECT v.id, `date`, p.`name`, `distance`, `distance_run`, `steps`, `sleep`, `weight`, `abdominals`, CONCAT(`systolic`, "/", `diastolic`) AS `bp`, `pulse`, `alcohol`, `za`, `tobacco`, `comments`
+        SELECT v.id, `date`, p.`name`, `distance`, `distance_run`, `steps`, `sleep`, `weight`, floors, very_active_minutes, `abdominals`, CONCAT(`systolic`, "/", `diastolic`) AS `bp`, `pulse`, `alcohol`, `za`, `tobacco`, `comments`
         FROM vital_stats v
         INNER JOIN people p ON v.person_id = p.id
         ' . $where . '

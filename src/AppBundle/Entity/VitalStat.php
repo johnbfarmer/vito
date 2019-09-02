@@ -77,7 +77,17 @@ class VitalStat
     /**
      * @ORM\Column(name="za", type="boolean")
      */
-    private $za;
+    private $za = false;
+
+    /**
+     * @ORM\Column(name="floors", type="integer")
+     */
+    private $floors = 0;
+
+    /**
+     * @ORM\Column(name="very_active_minutes", type="integer")
+     */
+    private $veryActiveMinutes = 0;
 
     /**
      * @ORM\Column(name="alcohol", type="decimal", precision=1, scale=3, nullable=true)
@@ -253,6 +263,30 @@ class VitalStat
     public function setZa($za)
     {
         $this->za = $za;
+
+        return $this;
+    }
+
+    public function getFloors()
+    {
+        return $this->floors;
+    }
+
+    public function setFloors($floors)
+    {
+        $this->floors = $floors;
+
+        return $this;
+    }
+
+    public function getVeryActiveMinutes()
+    {
+        return $this->veryActiveMinutes;
+    }
+
+    public function setVeryActiveMinutes($veryActiveMinutes)
+    {
+        $this->veryActiveMinutes = $veryActiveMinutes;
 
         return $this;
     }

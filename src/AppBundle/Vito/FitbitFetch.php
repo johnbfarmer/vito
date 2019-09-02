@@ -9,6 +9,7 @@ class FitbitFetch extends BaseProcess
     protected
         $personId = 1, // tbi get from command params
         $date,
+        $storeOnly = false,
         $token,
         $data,
         $secretsFile;
@@ -17,6 +18,7 @@ class FitbitFetch extends BaseProcess
     {
         $date = $this->parameters['date'];
         $days = $this->parameters['days'];
+        $this->storeOnly = $this->parameters['update-db'] == 0;
         $this->personId = $this->parameters['personId'];
         while (--$days >= 0) {
             $this->token = $this->getToken();
@@ -30,14 +32,27 @@ class FitbitFetch extends BaseProcess
                 }
                 $this->data = $this->getData($date);
             }
-            $this->insertData($date);
+
+            if (!$this->storeOnly) {
+                $this->insertData($date);
+            }
             $date = date('Y-m-d', strtotime($date . ' - 1 days'));
+        }
+    }
+
+    protected function saveData($data, $date)
+    {
+        $file = 'data' . DIRECTORY_SEPARATOR . str_replace('-', '', $date);
+        try {
+            file_put_contents($file, json_encode($data));
+        } catch(\Exception $e) {
+            throw new \Exception('failed to write to ' . $file);
         }
     }
 
     protected function insertData($date)
     {
-$this->output->writeln('inserting data...');
+        $this->output->writeln('inserting data...');
         if (empty($this->data)) {
             return;
         }
@@ -54,6 +69,8 @@ $this->output->writeln('inserting data...');
             $this->data['steps'],
             $this->data['distance'],
             $this->data['sleep'],
+            $this->data['floors'],
+            $this->data['veryActiveMinutes'],
         ];
 
         $insert .= '
@@ -68,11 +85,13 @@ $this->output->writeln('inserting data...');
 
         $sql = '
         INSERT INTO vital_stats
-        (`date`, `person_id`, `steps`, `distance`, `sleep`)
+        (`date`, `person_id`, `steps`, `distance`, `sleep`, `floors`, `very_active_minutes`)
         VALUES ' . $insert . '
         ON DUPLICATE KEY UPDATE 
         `steps` = VALUES(`steps`),
         `distance` = VALUES(`distance`),
+        `floors` = VALUES(`floors`),
+        `very_active_minutes` = VALUES(`very_active_minutes`),
         `sleep` = VALUES(`sleep`)';
 
         $connection->exec($sql);
@@ -92,9 +111,11 @@ $this->output->writeln('inserting data...');
         if (empty($activities['summary'])) {
             throw new \Exception('Summary is empty.');
         }
-
+        $this->saveData($activities, $date);
         return [
             'steps' => $activities['summary']['steps'],
+            'floors' => $activities['summary']['floors'],
+            'veryActiveMinutes' => $activities['summary']['veryActiveMinutes'],
             'distance' => $activities['summary']['distances'][0]['distance'], // improve, unsafe relying on position
         ];
     }
