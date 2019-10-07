@@ -85,9 +85,29 @@ class VitalStat
     private $floors = 0;
 
     /**
+     * @ORM\Column(name="floors_run", type="integer")
+     */
+    private $floorsRun = 0;
+
+    /**
      * @ORM\Column(name="very_active_minutes", type="integer")
      */
     private $veryActiveMinutes = 0;
+
+    /**
+     * @ORM\Column(name="distance_biked", type="integer")
+     */
+    private $distanceBiked = 0;
+
+    /**
+     * @ORM\Column(name="minutes_biked", type="integer")
+     */
+    private $minutesBiked = 0;
+
+    /**
+     * @ORM\Column(name="swim", type="integer")
+     */
+    private $swim = 0;
 
     /**
      * @ORM\Column(name="alcohol", type="decimal", precision=1, scale=3, nullable=true)
@@ -275,6 +295,54 @@ class VitalStat
     public function setFloors($floors)
     {
         $this->floors = $floors;
+
+        return $this;
+    }
+
+    public function getFloorsRun()
+    {
+        return $this->floorsRun;
+    }
+
+    public function setFloorsRun($floorsRun)
+    {
+        $this->floorsRun = $floorsRun;
+
+        return $this;
+    }
+
+    public function getDistanceBiked()
+    {
+        return $this->distanceBiked;
+    }
+
+    public function setDistanceBiked($distanceBiked)
+    {
+        $this->distanceBiked = $distanceBiked;
+
+        return $this;
+    }
+
+    public function getMinutesBiked()
+    {
+        return $this->minutesBiked;
+    }
+
+    public function setMinutesBiked($minutesBiked)
+    {
+        $this->minutesBiked = $minutesBiked;
+
+        return $this;
+    }
+
+    public function getSwim()
+    {
+        return $this->swim;
+    }
+
+    public function setSwim($swim)
+    {
+        $this->swim = $swim;
 
         return $this;
     }

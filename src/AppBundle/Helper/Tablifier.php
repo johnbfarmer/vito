@@ -119,10 +119,16 @@ class Tablifier
             'pulse' => 'Pulse',
             'za' => 'ZA',
             'floors' => 'Floors',
+            'floors_run' => 'Floors Run',
+            'very_active_minutes' => 'VAM',
+            'very_active_minutes' => 'VAM',
             'very_active_minutes' => 'VAM',
             // 'alcohol' => 'Alcohol',
             // 'tobacco' => 'Tobacco',
             // 'comments' => 'Comments',
+            'distance_biked' => 'Distance Biked',
+            'minutes_biked' => 'Minutes Biked',
+            'swim' => 'Swim',
         ];
     }
 

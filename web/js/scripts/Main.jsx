@@ -25,6 +25,10 @@ const metricLabels = {
     'za': 'ZA',
     'very_active_minutes': 'VAM',
     'floors': 'Floors',
+    'floors_run': 'Floors Run',
+    'distance_biked': 'Distance Biked',
+    'minutes_biked': 'Minutes Biked',
+    'swim': 'Swim',
     // 'tobacco': 'Tobacco',
 };
 

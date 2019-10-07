@@ -38,7 +38,11 @@ class GenericHelper
             'bp' => 'BP',
             'pulse' => 'Pulse',
             'floors' => 'Floors',
+            'floors_run' => 'Floors Run',
             'very_active_minutes' => 'Very Active Minutes',
+            'distance_biked' => 'Distance Biked',
+            'minutes_biked' => 'Minutes Biked',
+            'swim' => 'Swim',
         ];
 
         if (empty($fields)) {
