@@ -95,7 +95,7 @@ class VitalStat
     private $veryActiveMinutes = 0;
 
     /**
-     * @ORM\Column(name="distance_biked", type="integer")
+     * @ORM\Column(name="distance_biked", type="decimal", precision=2, scale=5, nullable=false, options={"default" = 0.00})
      */
     private $distanceBiked = 0;
 

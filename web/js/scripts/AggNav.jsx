@@ -36,36 +36,33 @@ export default class AggNav extends React.Component {
     }
 
     render() {
-        let unitChoicesByAgg = this.getNumUnitsOptions(this.props.common.agg)
-        let unitChoices = unitChoicesByAgg.map((v) => {
+        let aggOptions = [
+            'months', 'weeks', 'days'
+        ];
+        let aggChoices = aggOptions.map((v) => {
             return (
                 <option value={v} key={"opt_" + v}>{v}</option>
             )
         })
         return (
             <div className='top-border'>
-                <div onClick={this.props.common.updateAgg} className='pointer' data-agg='months'>
-                    by month
-                </div>
-                <div onClick={this.props.common.updateAgg} className='pointer' data-agg='weeks'>
-                    by week
-                </div>
-                <div onClick={this.props.common.updateAgg} className='pointer' data-agg='days'>
-                    by day
-                </div>
-                <div className="no-wrap">
-                    Show
-                    <select
+                <div>
+                    <input
                         onChange={(e) => {
                             var n = e.target.value
                             this.setState({units: n})
-                            this.props.common.updateAggUnits(n)
+                        }}
+                        onBlur={(e) => {
+                            this.props.common.updateAggUnits(this.state.units)
                         }}
                         value={this.state.units}
+                    />
+                    <select
+                        onChange={this.props.common.updateAgg}
+                        value={this.props.common.agg}
                     >
-                        {unitChoices}
+                        {aggChoices}
                     </select>
-                    {this.props.common.agg}
                 </div>
                 
             </div>

@@ -124,6 +124,7 @@ class FitbitFetch extends BaseProcess
     {
         $result = $this->curl('sleep', $date);
         $sleep = $result;
+        // $this->saveData($activities, $date); // tbi
         $totalMinutesAsleep = $sleep['summary']['totalMinutesAsleep'];
         return $totalMinutesAsleep > 90 ? $totalMinutesAsleep : 'null';
     }
