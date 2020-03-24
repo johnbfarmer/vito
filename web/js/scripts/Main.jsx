@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import RecentTab from './RecentTab.jsx';
 import SummaryTab from './SummaryTab.jsx';
@@ -29,7 +30,6 @@ const metricLabels = {
     'distance_biked': 'Distance Biked',
     'minutes_biked': 'Minutes Biked',
     'swim': 'Swim',
-    // 'tobacco': 'Tobacco',
 };
 
 export default class Vito extends React.Component {
@@ -54,7 +54,7 @@ export default class Vito extends React.Component {
             chartType: '',
             loading: true,
         };
-console.log(metricLabels)
+
         this.updatePerson = this.updatePerson.bind(this);
         this.updateRecord = this.updateRecord.bind(this);
         this.updateAggUnits = this.updateAggUnits.bind(this);
@@ -87,20 +87,9 @@ console.log(metricLabels)
     }
 
     updateAgg(e) {
-        var dataset = e.target.dataset;
-        var agg = dataset.agg;
+        var agg = e.target.value;
         var numUnits = this.state.numberOfDateUnits
-        switch(agg) {
-            case 'weeks':
-                numUnits = 13
-                break
-            case 'days':
-                numUnits = 20
-                break
-            default:
-                numUnits = 12
-        }
-        this.setState({makeApiCall: true, agg: agg, numberOfDateUnits: numUnits});
+        this.setState({makeApiCall: true, agg: agg});
     }
 
     updateSelectedChartMetrics(metric, clearSelection = false) {
@@ -225,4 +214,4 @@ console.log(metricLabels)
 
 
 
-ReactDOM.render(<Vito />, document.getElementById("content"));
+// ReactDOM.render(<Vito />, document.getElementById("content"));

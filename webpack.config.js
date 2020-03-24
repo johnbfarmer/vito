@@ -6,7 +6,7 @@ var APP_DIR = path.resolve(__dirname, 'web/js/scripts');
 
 var config = {
   entry: {
-    main: APP_DIR + '/Main.jsx',
+    main: APP_DIR + '/index.js',
   },
   output: {
     path: BUILD_DIR,
