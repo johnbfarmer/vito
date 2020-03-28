@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom
 import { Grid } from 'semantic-ui-react'
 import Navigation from './Navigation'
 import Main from './Main.jsx'
+import Summary from './Summary'
 
 class App extends React.Component {
     render() {
@@ -16,7 +17,7 @@ console.log('jbf?')
                       <Route path="/" render={(props) => {return <Navigation {...props} />}} />
                     </Grid.Column>
                     <Grid.Column width={13}>
-                      <Route path="/" render={(props) => {return <Main {...props} />}} />
+                      <Route path="/" render={(props) => {return <Summary {...props} />}} />
                     </Grid.Column>
                   </Grid>
               </Router>

@@ -5,7 +5,10 @@ function Navigation (props) {
     return (
         <div>
             <div>
-                <Link to="/">Main</Link>
+                <a href="/">Summary</a>
+            </div>
+            <div>
+                <a href="/new">New Record</a>
             </div>
         </div>
     );
