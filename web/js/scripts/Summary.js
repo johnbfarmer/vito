@@ -7,7 +7,7 @@ export default class SummaryTab extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: props.common.data,
+            data: [],
             agg: 'months',
             dateRangeId: null,
             dateRangeType: 'ym',
