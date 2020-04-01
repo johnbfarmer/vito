@@ -1,10 +1,6 @@
 var axios = require('axios')
 
-const urlPrefix = ''
-
-const apiMap = {
-    'a': 'b',
-}
+const apiMap = {}
 
 const getData = (view, id) => {
     view = apiMap[view] || view
