@@ -5,21 +5,6 @@ const maxLength = 100
 
 const tablify = (props) => {
     var data = props.data;
-    var dataFiltered = [];
-    var filter = typeof(props.filter) === 'string' ? {any: props.filter} : props.filter
-    if ('appFilter' in props && props.appFilter.length > 0) {
-        filter.app = props.appFilter
-    }
-    if ('activeFilter' in props && props.activeFilter.length > 0) {
-        filter.active = props.activeFilter
-    }
-
-    data.forEach((row) => {
-        if (satisfiesFilter(row, filter)) {
-            dataFiltered.push(row);
-        }
-    });
-    data = dataFiltered;
     if (data.length === 0) {
         return (
             <Table>
@@ -37,10 +22,7 @@ const tablify = (props) => {
     }
 
     var columns = props.columns.filter(col => {
-        if ('display' in col && col.display === false) {
-            return false
-        }
-        return true
+        return col.visible
     })
 
     var cols = columns.map((vals, idx) => {
@@ -53,6 +35,9 @@ const tablify = (props) => {
         var id = vals['id'];
 
         var cells = columns.map((col, colIdx) => {
+            if (!col.visible) {
+                return ''
+            }
             if ('specialCols' in props && col.uid in props.specialCols) {
                 return props.specialCols[col.uid](vals, rowIdx, colIdx)
             }
@@ -97,7 +82,6 @@ const tablify = (props) => {
         </Table>
     );
 }
-
 
 const satisfiesFilter = (row, filter) => {
     if (!Object.keys(filter).length) {

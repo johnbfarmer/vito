@@ -2,6 +2,8 @@ import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import CommonTable from './CommonTable.jsx';
 import VitoChart from './VitoChart.jsx';
+import dataManager from './DataManager'
+import tableHelper from './TableHelper'
 
 export default class SummaryTab extends React.Component {
     constructor(props) {
@@ -11,6 +13,10 @@ export default class SummaryTab extends React.Component {
             agg: 'months',
             dateRangeId: null,
             dateRangeType: 'ym',
+            loading: true,
+            personId: 1,
+            numberOfDateUnits: 12,
+            columns: []
         };
 
         this.busy = true;
@@ -23,23 +29,19 @@ export default class SummaryTab extends React.Component {
         this.handleData();
     }
 
-    componentWillUpdate(props) {
-        this.state.data = props.common.data;
-        this.state.agg = props.common.agg;
-    }
+    // componentWillUpdate(props) {
+    //     this.state.data = state.data;
+    //     this.state.agg = state.agg;
+    // }
 
-    componentDidUpdate(prevProps, prevState) {
-        var change = this.makeApiCall || this.props.common.makeApiCall;
-        if (!this.busy && change) {
-            this.handleData();
-        }
-        this.makeApiCall = false;
-    }
+    // componentDidUpdate(prevProps, prevState) {
+    //     this.handleData();
+    // }
 
     handleData() {
-        var id = this.props.common.personId || 1;
+        var id = this.state.personId || 1;
         this.loading(true);
-        var url = 'vito/' + id + '/' + this.state.agg + '/' + this.props.common.numberOfDateUnits;
+        var url = 'vito/' + id + '/' + this.state.agg + '/' + this.state.numberOfDateUnits;
         var qs = '';
         if (this.state.agg === 'days' && this.state.dateRangeId) {
             qs = '?dateRangeId=' + this.state.dateRangeId + '&dateRangeType=' + this.state.dateRangeType;
@@ -50,7 +52,7 @@ export default class SummaryTab extends React.Component {
                 return resp.json();
         }).then(resp => {
             if (resp.table.rows.length > 0) {
-                this.props.common.updateState({personId:id, data: {table:{rows:resp.table.rows, columns:resp.table.columns, total:resp.table.total}}, refreshChart: true});
+                this.setState({personId: id, data: resp.table.rows, columns: resp. table.columns, total:resp.table.total, refreshChart: true});
             }
             this.loading(false);
         });
@@ -72,16 +74,22 @@ export default class SummaryTab extends React.Component {
         }
     }
 
-    loading(busy) {
-        this.busy = busy;
-        this.props.common.updateLoading(busy);
+    loading(loading) {
+        this.setState({loading: loading});
     }
 
     render() {
+        var propsForTable = {
+            data: this.state.data,
+            columns: this.state.columns,
+            cb: {},
+            specialCols: {},
+        }
+        var tbl = tableHelper.tablify(propsForTable);
         return (
             <div>
-                <VitoChart data={this.props.common.data} common={this.props.common} />
-                <CommonTable data={this.props.common.data} rowClick={this.rowClick}/>
+                <VitoChart data={this.state.data} common={this.state} />
+                {tbl}
             </div>
         );
     }

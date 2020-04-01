@@ -1,20 +1,9 @@
 var axios = require('axios')
 
-const dataModel = JSON.parse(document.getElementById("content").dataset.model)
 const urlPrefix = ''
 
 const apiMap = {
-    'clients': 'client-list',
-    'config-defaults': 'admin/config-defaults',
-    'meetings': 'meetings',
-    'client-edit': 'client/',
-    'client-conversions': 'conversions/',
-    'client-config': 'configs/',
-    'all-client-configs': 'client-configs',
-    'config-edit': 'config/edit/',
-    'conversion-edit': 'conversion/edit/',
-    'tasks': 'tasks',
-    'change_log': 'admin/change-log',
+    'a': 'b',
 }
 
 const getData = (view, id) => {
