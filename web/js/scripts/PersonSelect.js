@@ -3,6 +3,12 @@ import React from 'react';
 const people = [{ id:1, name: 'John'},{ id:2, name: 'Ian'},{ id:3, name: 'Pily' },{ id:4, name: 'Choco'  }];
 
 export default class PersonSelect extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.updatePerson = this.updatePerson.bind(this);
+    }
+
     updatePerson(e) {
         var dataset = e.target.dataset;
         var id = dataset.id;
