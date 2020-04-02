@@ -69,6 +69,17 @@ const tablify = (props) => {
             </tr>);
     });
 
+    let total = ''
+    if ('total' in props) {
+        props.total.date = 'TOTAL';
+        total = columns.map((vals, idx) => {
+            let tot = props.total[vals.uid]
+            return (
+                <Table.Cell key={'tot_' + vals.uid} className='green'>{tot}</Table.Cell>
+            )
+        });
+    }
+
     return (
         <Table celled striped>
              <Table.Header>
@@ -78,6 +89,9 @@ const tablify = (props) => {
              </Table.Header>
             <Table.Body>
                 {rows}
+                <Table.Row>
+                    {total}
+                </Table.Row>
             </Table.Body>
         </Table>
     );

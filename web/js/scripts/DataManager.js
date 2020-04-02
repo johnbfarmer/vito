@@ -5,7 +5,7 @@ const urlPrefix = ''
 
 const getData = (view, id) => {
     view = apiMap[view] || view
-    var url = urlPrefix + '/api/' + view
+    var url = urlPrefix + view
     if (id) {
         url = url + id
     }
