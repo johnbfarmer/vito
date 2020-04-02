@@ -7,7 +7,7 @@ import VitoNav from './VitoNav';
 import dataManager from './DataManager';
 import tableHelper from './TableHelper';
 
-export default class SummaryTab extends React.Component {
+export default class Summary extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -17,8 +17,9 @@ export default class SummaryTab extends React.Component {
             dateRangeType: 'ym',
             loading: true,
             personId: 1,
-            numberOfDateUnits: 12,
-            columns: []
+            units: 12,
+            columns: [],
+            total: [],
         };
 
         this.busy = true;
@@ -35,7 +36,7 @@ export default class SummaryTab extends React.Component {
     handleData() {
         var id = this.state.personId || 1;
         this.loading(true);
-        var url = 'vito/' + id + '/' + this.state.agg + '/' + this.state.numberOfDateUnits;
+        var url = 'vito/' + id + '/' + this.state.agg + '/' + this.state.units;
         var qs = '';
         if (this.state.agg === 'days' && this.state.dateRangeId) {
             qs = '?dateRangeId=' + this.state.dateRangeId + '&dateRangeType=' + this.state.dateRangeType;
@@ -43,7 +44,7 @@ export default class SummaryTab extends React.Component {
         url = url + qs;
         fetch(url)
         .then(resp => {
-                return resp.json();
+            return resp.json();
         }).then(resp => {
             if (resp.table.rows.length > 0) {
                 this.setState({personId: id, data: resp.table.rows, columns: resp. table.columns, total:resp.table.total, refreshChart: true});
@@ -73,7 +74,7 @@ export default class SummaryTab extends React.Component {
     }
 
     updateState(s) {
-        this.setState(s);
+        this.setState(s, () => { this.handleData() });
     }
 
     render() {

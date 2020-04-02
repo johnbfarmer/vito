@@ -15,8 +15,8 @@ const AggNav = (props) => {
             <div>
                 <input
                     onChange={(e) => {
-                        var n = e.target.value
-                        props.updateState({units: n})
+                        var n = Number(e.target.value);
+                        props.updateState({units: n});
                     }}
                     onBlur={(e) => {
                         props.updateState({units: e.target.value})
