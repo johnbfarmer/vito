@@ -287,16 +287,17 @@ class VitalStatController extends Controller
             'start' => $dateStart,
             'end' => $dateEnd,
         ];
+        // return new JsonResponse($dates);
         switch ($agg) {
             case 'months':
-                $vitalStats = $statRepo->yearlySummary($personId, 'months', $numUnits);
+                $vitalStats = $statRepo->yearlySummary($personId, 'months', $numUnits, $dates);
                 break;
             case 'weeks':
-                $vitalStats = $statRepo->yearlySummary($personId, 'weeks', $numUnits);
+                $vitalStats = $statRepo->yearlySummary($personId, 'weeks', $numUnits, $dates);
                 break;
             case 'days':
                 if (!$request->query->has('dateRangeId')) {
-                    $vitalStats = $statRepo->yearlySummary($personId, 'days', $numUnits);
+                    $vitalStats = $statRepo->yearlySummary($personId, 'days', $numUnits, $dates);
                 } else {
                     $dateRangeType = $request->query->get('dateRangeType');
                     $dateRangeId = $request->query->get('dateRangeId');

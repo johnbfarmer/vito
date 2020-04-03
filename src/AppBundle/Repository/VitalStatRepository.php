@@ -152,6 +152,9 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
         if (!empty($dates['start'])) {
             $sql .= '
             AND `date` BETWEEN "' . $dates['start'] . '" AND "' . $dates['end'] . '"';
+        } elseif (!empty($dates['end'])) {
+            $sql .= '
+            AND `date` <= "' . $dates['end'] . '"';
         }
 
         $sql .= '
