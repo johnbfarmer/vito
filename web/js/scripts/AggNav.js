@@ -16,17 +16,17 @@ const AggNav = (props) => {
                 <input
                     onChange={(e) => {
                         var n = Number(e.target.value);
-                        props.updateState({units: n});
+                        props.updateState({ units: n, makeApiCall: true });
                     }}
                     onBlur={(e) => {
-                        props.updateState({units: e.target.value})
+                        props.updateState({ units: e.target.value, makeApiCall: true })
                     }}
                     value={props.units}
                 />
                 <select
                     onChange={(e) => {
                         var n = e.target.value
-                        props.updateState({agg: n})
+                        props.updateState({ agg: n, makeApiCall: true })
                     }}
                     value={props.agg}
                 >

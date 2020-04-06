@@ -274,7 +274,7 @@ class VitalStatController extends Controller
     }
 
     /**
-     * @Route("/{personId}/{agg}/{numUnits}", name="summary", requirements={"agg"="months|days|weeks"})
+     * @Route("/{personId}/{agg}/{numUnits}", name="summary", requirements={"agg"="years|months|days|weeks"})
      * @Method("GET")
      */
     public function summaryAction(Request $request, $agg, $personId, $numUnits)

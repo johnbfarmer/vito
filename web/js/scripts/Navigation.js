@@ -8,7 +8,7 @@ function Navigation (props) {
                 <a href="/">Summary</a>
             </div>
             <div>
-                <a href="/new">New Record</a>
+                <a href="/vito/new/1">New Record</a>
             </div>
         </div>
     );

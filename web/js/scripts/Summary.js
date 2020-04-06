@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import { Grid } from 'semantic-ui-react'
+import { Grid, Header, Table } from 'semantic-ui-react'
 import CommonTable from './CommonTable.jsx';
 import VitoChart from './VitoChart.jsx';
 import VitoNav from './VitoNav';
@@ -33,6 +33,7 @@ const metricLabels = {
 export default class Summary extends React.Component {
     constructor(props) {
         super(props);
+console.log(props.match.params.agg)
         this.state = {
             data: [],
             agg: 'months',
@@ -52,7 +53,7 @@ export default class Summary extends React.Component {
         this.busy = true;
         this.makeApiCall = true;
         this.handleData = this.handleData.bind(this);
-        this.rowClick = this.rowClick.bind(this);
+        this.dateClick = this.dateClick.bind(this);
         this.updateState = this.updateState.bind(this);
     }
 
@@ -97,6 +98,30 @@ export default class Summary extends React.Component {
         }
     }
 
+    dateClick(vals, rowIdx, colIdx) {
+        let url = '/vito/' + vals.id + '/edit';
+        return (
+            <Table.Cell key={'cell_' + rowIdx + '_' + colIdx}>
+                <a
+                    href={url}
+                >
+                    {vals.date}
+                </a>
+            </Table.Cell>
+        )
+        // if id is dateRangeId_, handle dateRangeId
+        // if (typeof(id) === 'string' && id.substring(0,3) === 'ym_') {
+        //     this.setState({agg: 'days', dateRangeId: id.substring(3), dateRangeType: 'ym'});
+        //     this.makeApiCall = true;
+        // } else if (typeof(id) === 'string' && id.substring(0,3) === 'yw_') {
+        //     this.setState({agg: 'days', dateRangeId: id.substring(3), dateRangeType: 'yw'});
+        //     this.makeApiCall = true;
+        // } else {
+        //     var id = dataset.id;
+        //     window.location = url;
+        // }
+    }
+
     loading(loading) {
         this.setState({loading: loading});
     }
@@ -110,8 +135,8 @@ export default class Summary extends React.Component {
             data: this.state.data,
             columns: this.state.columns,
             total: this.state.total,
-            cb: { date: this.rowClick },
-            specialCols: {},
+            cb: {},
+            specialCols: { date: this.dateClick },
         }
         var tbl = tableHelper.tablify(propsForTable);
 
