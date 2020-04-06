@@ -33,17 +33,17 @@ const metricLabels = {
 export default class Summary extends React.Component {
     constructor(props) {
         super(props);
-console.log(props.match.params.agg)
+
         this.state = {
             data: [],
-            agg: 'months',
+            agg: props.match.params.agg || 'months',
             dateRangeId: null,
             dateRangeType: 'ym',
             chartType: '',
             refreshChart: false,
             loading: true,
             personId: 1,
-            units: 12,
+            units: props.match.params.units || 12,
             columns: [],
             total: [],
             selectedMetrics: ['distance_run'],
@@ -67,7 +67,7 @@ console.log(props.match.params.agg)
         }
         var id = this.state.personId || 1;
         this.loading(true);
-        var url = 'vito/' + id + '/' + this.state.agg + '/' + this.state.units;
+        var url = '/vito/' + id + '/' + this.state.agg + '/' + this.state.units;
         var qs = '';
         if (this.state.agg === 'days' && this.state.dateRangeId) {
             qs = '?dateRangeId=' + this.state.dateRangeId + '&dateRangeType=' + this.state.dateRangeType;
