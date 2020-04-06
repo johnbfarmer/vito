@@ -1,30 +1,61 @@
 import React from 'react';
 
+const ignoreCols = [
+    'id',
+    'date',
+    'iso_date',
+];
+
+const maxMetrics = 4;
+
 export default class ChartMetricSelect extends React.Component {
     constructor(props) {
         super(props)
 
-        this.metricSelect = this.metricSelect.bind(this)
+        this.singleMetricSelect = this.singleMetricSelect.bind(this)
         this.addToSelection = this.addToSelection.bind(this)
+
+        this.state = {
+            selectedMetrics: this.props.selectedMetrics
+        }
     }
 
-    metricSelect(e) {
-        this.props.common.updateSelectedChartMetrics(e.target.dataset.metric, true)
+    singleMetricSelect(e) {
+        let metric = e.target.dataset.metric
+        this.setState({ selectedMetrics: [] }, () => this.addToSelection(null, metric) )
     }
 
-    addToSelection(e) {
-        this.props.common.updateSelectedChartMetrics(e.target.dataset.metric)
+    addToSelection(e, m) {
+        let metrics = this.state.selectedMetrics
+        let metric = m || e.target.dataset.metric
+        let pos = metrics.indexOf(metric);
+        if (pos >= 0) {
+            metrics.splice(pos, 1);
+        } else {
+            metrics.push(metric);
+        }
+
+        if (metrics.length > maxMetrics) {
+            metrics.shift();
+        }
+
+        this.props.updateState({ selectedMetrics: metrics, refreshChart: true })
     }
 
     render() {
-        var metrics = this.props.common.availableChartMetrics.map((metric, idx) => {
-            var isSelected = this.props.common.selectedChartMetrics.indexOf(metric) >= 0;
+        var metrics = this.props.columns.map((col, idx) => {
+            let metric = col.uid
+            if (ignoreCols.indexOf(metric) >= 0) {
+                return
+            }
+            let label = col.label
+            var isSelected = this.state.selectedMetrics.indexOf(metric) >= 0;
             return <ChartMetricSelectItem 
                     metric={metric}
                     key={'m_' + idx}
-                    metrics={this.props.common.metricLabels}
+                    label={ label }
                     selected={isSelected}
-                    metricSelect={this.metricSelect}
+                    singleMetricSelect={this.singleMetricSelect}
                     metricSelectAdd={this.addToSelection}
                    />
         }, this);
@@ -40,8 +71,8 @@ export class ChartMetricSelectItem extends React.Component {
     render() {
         var cls = this.props.selected ? 'hot pointer' : 'pointer';
         return (
-            <div className={cls} data-metric={this.props.metric} onClick={this.props.metricSelectAdd} onDoubleClick={this.props.metricSelect}>
-                {this.props.metrics[this.props.metric]}
+            <div className={cls} data-metric={this.props.metric} onClick={this.props.metricSelectAdd} onDoubleClick={this.props.singleMetricSelect}>
+                {this.props.label}
             </div>
         );
     }

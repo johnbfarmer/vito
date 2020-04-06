@@ -8,6 +8,9 @@ export default class VitoChart extends React.Component {
         this.handleChartTypeSelection = this.handleChartTypeSelection.bind(this)
         this.state = {
             selectedMetrics: ['weight'],
+            availableMetrics: ['weight'],
+            chartType: '',
+            refreshChart: this.props.refreshChart,
             config: {
                 title: {
                     text: 'VitoStats'
@@ -27,23 +30,26 @@ export default class VitoChart extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.updateConfig()
+    }
+
     componentDidUpdate(prevProps, prevState) {
-        if (!('table' in prevProps.data) && 'table' in this.props.data) {
+        if (prevProps.data.length === 0 && this.props.data.length > 0) {
             this.updateConfig();
             return null;
         }
-
-        if (this.props.common.refreshChart) {
+console.log(this.props.refreshChart)
+        if (this.props.refreshChart) {
             this.updateConfig();
             return null;
         }
     }
 
     updateConfig() {
-        if (!('table' in this.props.data)) {
+        if (this.props.data.length < 1) {
             return;
         }
-
         var yVal = 0.0;
         var xVal = 0;
         var dt = 0;
@@ -54,8 +60,8 @@ export default class VitoChart extends React.Component {
         var metrics = [];
         var selectedMetrics = [];
 
-        this.props.data.table.columns.forEach((v,k) => {
-            if (v.uid in this.props.common.metricLabels) {
+        this.props.columns.forEach((v,k) => {
+            if (v.uid in this.props.metricLabels) {
                 metrics.push(v.uid);
             }
         });
@@ -64,7 +70,7 @@ export default class VitoChart extends React.Component {
             return;
         }
 
-        this.props.common.selectedChartMetrics.forEach((v,k) => {
+        this.props.selectedMetrics.forEach((v,k) => {
             if (metrics.indexOf(v) >= 0) {
                 selectedMetrics.push(v);
             }
@@ -82,13 +88,13 @@ export default class VitoChart extends React.Component {
             config.series.push(this.defaultSeriesObj(v, k));
             config.yAxis.push({
                 title: {
-                    text: this.props.common.metricLabels[v],
+                    text: this.props.metricLabels[v],
                 },
                 opposite: k > 0,
             });
         });
 
-        this.props.data.table.rows.forEach((v,k) => {
+        this.props.data.forEach((v,k) => {
             dt = v.iso_date;
             y = dt.substr(0,4);
             m = parseInt(dt.substr(5,2)) - 1;
@@ -113,15 +119,16 @@ export default class VitoChart extends React.Component {
         });
 
         this.state.config = config;
-        this.props.common.updateState({refreshChart: false, makeApiCall: false, availableChartMetrics: metrics, selectedChartMetrics: selectedMetrics});
+        this.setState({ refreshChart: false })
+        this.props.updateState({refreshChart: false, makeApiCall: false, availableChartMetrics: metrics, selectedChartMetrics: selectedMetrics});
     }
 
     defaultSeriesObj(uid, yAxisIdx) {
         return {
-            name: this.props.common.metricLabels[uid],
+            name: this.props.metricLabels[uid],
             data: [],
             yAxis: yAxisIdx,
-            type: this.props.common.chartType,
+            type: this.props.chartType,
             marker: {
                 enabled: false
             },
@@ -147,8 +154,8 @@ export default class VitoChart extends React.Component {
     }
 
     handleChartTypeSelection(chartType) {
-        this.props.common.updateState({
-            showChart: chartType !== '',
+        this.setState({ chartType: chartType })
+        this.props.updateState({
             chartType: chartType,
             refreshChart: true
         })
@@ -156,7 +163,7 @@ export default class VitoChart extends React.Component {
 
     render() {
         let chart = 
-            this.props.common.showChart
+            this.state.chartType !== ''
             ? (
                 <div id="vito-chart">
                     <ReactHighcharts config={this.state.config} ref="chart"></ReactHighcharts>;
@@ -164,7 +171,7 @@ export default class VitoChart extends React.Component {
             )
             : ''
 
-        let chartTypeSelect = <ChartTypeSelect chartType={this.props.common.showChart} handleSelect={this.handleChartTypeSelection}/>
+        let chartTypeSelect = <ChartTypeSelect chartType={this.state.chartType} handleSelect={this.handleChartTypeSelection}/>
 
         return (
             <div className="chart-container">

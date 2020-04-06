@@ -6,8 +6,8 @@ import Navigation from './Navigation';
 
 export default class VitoNav extends React.Component {
     render() {
-        var aggNav = this.props.agg ? <AggNav {...this.props} /> : '';
-        var chartNav = this.props.showChart ? <ChartMetricSelect {...this.props} /> : '';
+        var aggNav = this.props.agg ? <AggNav { ...this.props } /> : '';
+        var chartNav = this.props.chartType !== '' ? <ChartMetricSelect { ...this.props } /> : '';
         return (
             <div>
                 {chartNav}

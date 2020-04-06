@@ -10,12 +10,16 @@ export default class ChartTypeSelect extends React.Component {
         var dataset = e.target.dataset;
         this.props.handleSelect(dataset.type)
     }
+
     render() {
+        let lineSelectedClass = this.props.chartType === 'line' ? ' hot' : ''
+        let barSelectedClass = this.props.chartType === 'column' ? ' hot' : ''
+        let cls = 'pointer chart-type-selector'
         return (
             <div>
-                <span className="pointer chart-type-selector" onClick={this.handleClick} data-type="">none</span>
-                <span className="pointer chart-type-selector" onClick={this.handleClick} data-type="line">line</span>
-                <span className="pointer chart-type-selector" onClick={this.handleClick} data-type="column">bar</span>
+                <span className={cls} onClick={this.handleClick} data-type="">none</span>
+                <span className={cls + lineSelectedClass} onClick={this.handleClick} data-type="line">line</span>
+                <span className={cls + barSelectedClass} onClick={this.handleClick} data-type="column">bar</span>
             </div>
         );
     }

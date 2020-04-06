@@ -7,6 +7,29 @@ import VitoNav from './VitoNav';
 import { getData } from './DataManager';
 import tableHelper from './TableHelper';
 
+const maxMetrics = 4;
+
+const metricLabels = {
+    'distance': 'Distance',
+    'distance_run': 'Distance Run',
+    'steps': 'Steps',
+    'stepsPerKm': 'Steps/Km',
+    'sleep': 'Sleep',
+    'weight': 'Weight',
+    'abdominals': 'Abdominals',
+    'systolic': 'Systolic',
+    'diastolic': 'Diastolic',
+    'bp': 'Blood Pressure',
+    'pulse': 'Pulse',
+    'za': 'ZA',
+    'very_active_minutes': 'VAM',
+    'floors': 'Floors',
+    'floors_run': 'Floors Run',
+    'distance_biked': 'Distance Biked',
+    'minutes_biked': 'Minutes Biked',
+    'swim': 'Swim',
+};
+
 export default class Summary extends React.Component {
     constructor(props) {
         super(props);
@@ -15,11 +38,15 @@ export default class Summary extends React.Component {
             agg: 'months',
             dateRangeId: null,
             dateRangeType: 'ym',
+            chartType: '',
+            refreshChart: false,
             loading: true,
             personId: 1,
             units: 12,
             columns: [],
             total: [],
+            selectedMetrics: ['distance_run'],
+            makeApiCall: true,
         };
 
         this.busy = true;
@@ -34,6 +61,9 @@ export default class Summary extends React.Component {
     }
 
     handleData() {
+        if (!this.state.makeApiCall) {
+            return
+        }
         var id = this.state.personId || 1;
         this.loading(true);
         var url = 'vito/' + id + '/' + this.state.agg + '/' + this.state.units;
@@ -84,6 +114,7 @@ export default class Summary extends React.Component {
             specialCols: {},
         }
         var tbl = tableHelper.tablify(propsForTable);
+
         return (
             <div>
                 <Grid>
@@ -91,7 +122,11 @@ export default class Summary extends React.Component {
                         <VitoNav { ...this.state } updateState={this.updateState} />
                     </Grid.Column>
                     <Grid.Column width={13}>
-                        <VitoChart data={this.state.data} common={this.state} />
+                        <VitoChart 
+                            { ...this.state }
+                             updateState={this.updateState}
+                             metricLabels={metricLabels}
+                        />
                         {tbl}
                     </Grid.Column>
                 </Grid>
