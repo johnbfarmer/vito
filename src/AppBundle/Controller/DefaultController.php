@@ -21,7 +21,17 @@ class DefaultController extends Controller
     /**
      * @Route("/{agg}/{numUnits}", name="summary_view", requirements={"agg"="years|months|days|weeks"})
      */
-    public function summaryAction(Request $request, $agg, $numUnits)
+    public function summaryAction(Request $request)
+    {
+        return $this->render('default/vito.html.twig', [
+            'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
+        ]);
+    }
+
+    /**
+     * @Route("/{unitType}/{unit}/{agg}", name="summary_breakdown", requirements={"agg"="years|months|days|weeks"})
+     */
+    public function summaryBreakdownAction(Request $request)
     {
         return $this->render('default/vito.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
