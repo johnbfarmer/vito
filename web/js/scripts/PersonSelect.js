@@ -12,7 +12,7 @@ export default class PersonSelect extends React.Component {
     updatePerson(e) {
         var dataset = e.target.dataset;
         var id = dataset.id;
-        this.props.updateState({ personId: id  })
+        this.props.updateState({ personId: id, makeApiCall: true })
       }
 
     render() {

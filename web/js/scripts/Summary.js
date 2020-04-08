@@ -36,10 +36,12 @@ export default class Summary extends React.Component {
         super(props);
 
         let units = props.match.params.units || 12
+        let dateStart = null
         let dateEnd = null
         if ('unitType' in props.match.params) {
             let obj = this.calcUnits(props.match.params);
             units = obj.units;
+            dateStart = obj.dateStart;
             dateEnd = obj.dateEnd;
         }
 
@@ -53,6 +55,7 @@ export default class Summary extends React.Component {
             loading: true,
             personId: 1,
             units: units,
+            dateStart: dateStart,
             dateEnd: dateEnd,
             columns: [],
             total: [],
@@ -79,8 +82,12 @@ export default class Summary extends React.Component {
         this.loading(true);
         var url = '/vito/' + id + '/' + this.state.agg + '/' + this.state.units;
         var qs = '';
+        if (this.state.dateStart !== null) {
+            qs += '?dateStart=' + this.state.dateStart;
+        }
         if (this.state.dateEnd !== null) {
-            qs = '?dateEnd=' + this.state.dateEnd;
+            qs += qs === '' ? '?' : '&';
+            qs += 'dateEnd=' + this.state.dateEnd;
         }
         url = url + qs;
         getData(url)
@@ -103,16 +110,17 @@ export default class Summary extends React.Component {
                 dateEnd = today;
                 units = moment().format('D');
             }
-            return { units, dateEnd }
+            let dateStart = moment(dateEnd).format('YYYY-MM-01');
+            return { units, dateEnd, dateStart }
         }
 
         if (routeParams.unitType === 'week') {
             let yr = routeParams.unit.substring(0, 4);
             let wk = routeParams.unit.substring(4);
-            console.log(moment(yr).add(wk, 'weeks').startOf('isoWeek').format('YYYY-MM-DD'), moment(yr).add(wk, 'weeks').endOf('isoWeek').format('YYYY-MM-DD'));
+            let dateStart = moment(yr).add(wk, 'weeks').startOf('isoWeek').format('YYYY-MM-DD');
             let dateEnd = moment(yr).add(wk-1, 'weeks').endOf('isoWeek').format('YYYY-MM-DD');
             let units = 7;
-            return { units, dateEnd }
+            return { units, dateEnd, dateStart }
         }
     }
 
