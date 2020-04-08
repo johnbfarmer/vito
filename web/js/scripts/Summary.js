@@ -109,7 +109,8 @@ export default class Summary extends React.Component {
         if (routeParams.unitType === 'week') {
             let yr = routeParams.unit.substring(0, 4);
             let wk = routeParams.unit.substring(4);
-            let dateEnd = moment(yr).add(wk, 'weeks').endOf('week').format('YYYY-MM-DD');
+            console.log(moment(yr).add(wk, 'weeks').startOf('isoWeek').format('YYYY-MM-DD'), moment(yr).add(wk, 'weeks').endOf('isoWeek').format('YYYY-MM-DD'));
+            let dateEnd = moment(yr).add(wk-1, 'weeks').endOf('isoWeek').format('YYYY-MM-DD');
             let units = 7;
             return { units, dateEnd }
         }
@@ -117,34 +118,27 @@ export default class Summary extends React.Component {
 
     dateCellDisplay(vals, rowIdx, colIdx) {
         let url = '/vito/' + vals.id + '/edit';
+        let display = moment(vals.date).format('MMM D, YYYY');
         if (typeof(vals.id) == 'string') {
             if (vals.id.substring(0,3) === 'ym_') {
                 url = '/month/' + vals.id.substring(3) + '/days';
+                display = moment(vals.date).format('MMM, YYYY');
             }
             if (vals.id.substring(0,3) === 'yw_') {
                 url = '/week/' + vals.id.substring(3) + '/days';
+                display = 'Week ' + vals.id.substring(7) + ' of ' + vals.id.substring(3, 7);
             }
         }
+
         return (
             <Table.Cell key={'cell_' + rowIdx + '_' + colIdx}>
                 <a
                     href={url}
                 >
-                    {vals.date}
+                    { display }
                 </a>
             </Table.Cell>
         )
-        // if id is dateRangeId_, handle dateRangeId
-        // if (typeof(id) === 'string' && id.substring(0,3) === 'ym_') {
-        //     this.setState({agg: 'days', dateRangeId: id.substring(3), dateRangeType: 'ym'});
-        //     this.makeApiCall = true;
-        // } else if (typeof(id) === 'string' && id.substring(0,3) === 'yw_') {
-        //     this.setState({agg: 'days', dateRangeId: id.substring(3), dateRangeType: 'yw'});
-        //     this.makeApiCall = true;
-        // } else {
-        //     var id = dataset.id;
-        //     window.location = url;
-        // }
     }
 
     loading(loading) {

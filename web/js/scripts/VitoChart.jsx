@@ -39,7 +39,7 @@ export default class VitoChart extends React.Component {
             this.updateConfig();
             return null;
         }
-console.log(this.props.refreshChart)
+
         if (this.props.refreshChart) {
             this.updateConfig();
             return null;
