@@ -287,7 +287,7 @@ class VitalStatController extends Controller
             'start' => $dateStart,
             'end' => $dateEnd,
         ];
-        // return new JsonResponse($dates);
+
         switch ($agg) {
             case 'months':
                 $vitalStats = $statRepo->yearlySummary($personId, 'months', $numUnits, $dates);

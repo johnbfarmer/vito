@@ -90,7 +90,7 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
         if ($agg === 'days') {
             $dt = 'v.date';
             $key = 'v.date';
-            $id = 'v.date';
+            $id = 'v.id';
         }
 
         $sql = $this->summaryQuery($agg, $limit, $dates);
@@ -111,7 +111,7 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
         if ($agg === 'days') {
             $dt = 'v.date';
             $key = 'v.date';
-            $id = 'v.date';
+            $id = 'v.id';
         }
 
         return [$key, $dt, $id];
