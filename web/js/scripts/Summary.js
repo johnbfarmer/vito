@@ -1,14 +1,13 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { Grid, Header, Table } from 'semantic-ui-react'
-import CommonTable from './CommonTable.jsx';
-import VitoChart from './VitoChart.jsx';
+
+import VitoChart from './VitoChart';
 import VitoNav from './VitoNav';
 import { getData } from './DataManager';
 import tableHelper from './TableHelper';
 
 const moment = require('moment');
-const maxMetrics = 4;
 
 const metricLabels = {
     'distance': 'Distance',
@@ -61,6 +60,9 @@ export default class Summary extends React.Component {
             total: [],
             selectedMetrics: ['distance_run'],
             makeApiCall: true,
+            title: 'Vito Stats',
+            prevLink: '/months/12?dateEnd=2019-04-01',
+            nextLink: null,
         };
 
         this.busy = true;

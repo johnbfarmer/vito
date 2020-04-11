@@ -102,8 +102,19 @@
 }
 
 .chart-container {
-    text-align: right;
     width: 100%;
+}
+
+.chart-top {
+    text-align: center;
+}
+
+.title-area {
+    /*text-align: center;*/
+}
+
+.chart-type-container {
+    float: right;
 }
 
 .full-width {

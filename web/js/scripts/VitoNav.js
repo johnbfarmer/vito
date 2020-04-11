@@ -10,9 +10,9 @@ export default class VitoNav extends React.Component {
         var chartNav = this.props.chartType !== '' ? <ChartMetricSelect { ...this.props } /> : '';
         return (
             <div>
-                {chartNav}
                 <Navigation { ...this.props } />
                 <PersonSelect { ...this.props } />
+                {chartNav}
                 {aggNav}
             </div>
         );

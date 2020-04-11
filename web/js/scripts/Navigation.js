@@ -2,13 +2,15 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom'
 
 function Navigation (props) {
+    let linkNew = '/vito/new/' + props.personId
+
     return (
         <div>
             <div>
-                <a href="/">Summary</a>
+                <a href="/">Home</a>
             </div>
             <div>
-                <a href="/vito/new/1">New Record</a>
+                <a href={ linkNew }>New Record</a>
             </div>
         </div>
     );

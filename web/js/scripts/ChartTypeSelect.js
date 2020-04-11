@@ -18,7 +18,7 @@ export default class ChartTypeSelect extends React.Component {
         let noneSelectedColor = this.props.chartType === '' ? 'red' : 'black'
         let cls = 'pointer chart-type-selector'
         return (
-            <div>
+            <div className='chart-type-container'>
                 <span className={ cls } onClick={ this.handleClick } data-type="">
                     <Icon link color={ noneSelectedColor } name='minus' />
                 </span>

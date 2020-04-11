@@ -1,32 +1,21 @@
 import React from 'react';
 var ReactHighcharts = require('react-highcharts');
-import ChartTypeSelect from './ChartTypeSelect.jsx';
+import ChartTitleArea from './ChartTitleArea';
+import ChartTypeSelect from './ChartTypeSelect';
 
 export default class VitoChart extends React.Component {
     constructor(props) {
         super(props);
-        this.handleChartTypeSelection = this.handleChartTypeSelection.bind(this)
+
+        this.handleChartTypeSelection = this.handleChartTypeSelection.bind(this);
+        this.updateConfig = this.updateConfig.bind(this);
+
         this.state = {
             selectedMetrics: ['weight'],
             availableMetrics: ['weight'],
             chartType: '',
             refreshChart: this.props.refreshChart,
-            config: {
-                title: {
-                    text: 'VitoStats'
-                },
-                series: [{
-                    name: '',
-                    data: [],
-                }],
-                xAxis: {
-                    type: 'datetime',
-                    dateTimeLabelFormats: {
-                        month: '%b %Y',
-                        year: '%Y'
-                    },
-                },
-            }
+            config: {},
         }
     }
 
@@ -56,7 +45,7 @@ export default class VitoChart extends React.Component {
         var y = 0;
         var m = 0;
         var d = 0;
-        var config = this.defaultConfig();
+        var config = this.defaultConfig(this.props);
         var metrics = [];
         var selectedMetrics = [];
 
@@ -136,10 +125,10 @@ export default class VitoChart extends React.Component {
         };
     }
 
-    defaultConfig() {
+    defaultConfig(props) {
         return {
                 title: {
-                    text: 'VitoStats'
+                    text: ''
                 },
                 series: [],
                 yAxis: [],
@@ -171,11 +160,15 @@ export default class VitoChart extends React.Component {
             )
             : ''
 
-        let chartTypeSelect = <ChartTypeSelect chartType={this.state.chartType} handleSelect={this.handleChartTypeSelection}/>
+        let chartTypeSelect = <ChartTypeSelect chartType={this.state.chartType} handleSelect={this.handleChartTypeSelection} />
+        let titleArea = <ChartTitleArea { ...this.props } />
 
         return (
             <div className="chart-container">
-                {chartTypeSelect}
+                <div className="chart-top">
+                    {titleArea}
+                    {chartTypeSelect}
+                </div>
                 {chart}
             </div>
         );
