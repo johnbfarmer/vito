@@ -289,6 +289,9 @@ class VitalStatController extends Controller
         ];
 
         switch ($agg) {
+            case 'years':
+                $vitalStats = $statRepo->yearlySummary($personId, 'years', $numUnits, $dates);
+                break;
             case 'months':
                 $vitalStats = $statRepo->yearlySummary($personId, 'months', $numUnits, $dates);
                 break;

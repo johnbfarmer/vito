@@ -2,7 +2,7 @@ import React from 'react';
 
 const AggNav = (props) => {
     let aggOptions = [
-        'months', 'weeks', 'days'
+        'years', 'months', 'weeks', 'days'
     ];
     let aggChoices = aggOptions.map((v) => {
         return (

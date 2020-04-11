@@ -13,20 +13,20 @@ export default class ChartTypeSelect extends React.Component {
     }
 
     render() {
-        let lineSelectedClass = this.props.chartType === 'line' ? ' hot' : ''
-        let barSelectedClass = this.props.chartType === 'column' ? ' hot' : ''
-        let noneSelectedClass = this.props.chartType === '' ? ' hot' : ''
+        let lineSelectedColor = this.props.chartType === 'line' ? 'red' : 'black'
+        let barSelectedColor = this.props.chartType === 'column' ? 'red' : 'black'
+        let noneSelectedColor = this.props.chartType === '' ? 'red' : 'black'
         let cls = 'pointer chart-type-selector'
         return (
             <div>
-                <span className={cls + noneSelectedClass} onClick={this.handleClick} data-type="">
-                    <Icon link name='minus' />
+                <span className={ cls } onClick={ this.handleClick } data-type="">
+                    <Icon link color={ noneSelectedColor } name='minus' />
                 </span>
-                <span className={cls + lineSelectedClass} onClick={this.handleClick} data-type="line">
-                    <Icon link name='chart line' />
+                <span className={ cls } onClick={ this.handleClick } data-type="line">
+                    <Icon link color={ lineSelectedColor } name='chart line' />
                 </span>
-                <span className={cls + barSelectedClass} onClick={this.handleClick} data-type="column">
-                    <Icon link name='chart bar' />
+                <span className={ cls } onClick={ this.handleClick } data-type="column">
+                    <Icon link color={ barSelectedColor } name='chart bar' />
                 </span>
             </div>
         );

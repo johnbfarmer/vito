@@ -92,6 +92,11 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
             $key = 'v.date';
             $id = 'v.id';
         }
+        if ($agg === 'years') {
+            $dt = 'YEAR(v.date)';
+            $key = 'YEAR(v.date)';
+            $id = 'YEAR(v.date)';
+        }
 
         $sql = $this->summaryQuery($agg, $limit, $dates);
         $conn = $this->getEntityManager()->getConnection();
@@ -112,6 +117,11 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
             $dt = 'v.date';
             $key = 'v.date';
             $id = 'v.id';
+        }
+        if ($agg === 'years') {
+            $dt = 'YEAR(v.date)';
+            $key = 'YEAR(v.date)';
+            $id = 'YEAR(v.date)';
         }
 
         return [$key, $dt, $id];

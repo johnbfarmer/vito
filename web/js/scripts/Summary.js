@@ -117,9 +117,17 @@ export default class Summary extends React.Component {
         if (routeParams.unitType === 'week') {
             let yr = routeParams.unit.substring(0, 4);
             let wk = routeParams.unit.substring(4);
-            let dateStart = moment(yr).add(wk, 'weeks').startOf('isoWeek').format('YYYY-MM-DD');
+            let dateStart = moment(yr).add(wk-1, 'weeks').startOf('isoWeek').format('YYYY-MM-DD');
             let dateEnd = moment(yr).add(wk-1, 'weeks').endOf('isoWeek').format('YYYY-MM-DD');
             let units = 7;
+            return { units, dateEnd, dateStart }
+        }
+
+        if (routeParams.unitType === 'year') {
+            let yr = routeParams.unit.substring(0, 4);
+            let dateStart = moment(routeParams.unit + '0101', 'YYYYMMDD').format('YYYY-MM-DD');
+            let dateEnd = moment(dateStart).endOf('year').format('YYYY-MM-DD');
+            let units = 12;
             return { units, dateEnd, dateStart }
         }
     }
@@ -135,6 +143,10 @@ export default class Summary extends React.Component {
             if (vals.id.substring(0,3) === 'yw_') {
                 url = '/week/' + vals.id.substring(3) + '/days';
                 display = 'Week ' + vals.id.substring(7) + ' of ' + vals.id.substring(3, 7);
+            }
+            if (vals.date.length === 4) {
+                url = '/year/' + vals.id + '/months';
+                display = vals.id;
             }
         }
 
