@@ -19,9 +19,9 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/{agg}/{numUnits}", name="summary_view", requirements={"agg"="years|months|days|weeks"})
+     * @Route("/{agg}/{numUnits}/{endDate}", name="summary_view_with_end", requirements={"agg"="years|months|days|weeks"})
      */
-    public function summaryAction(Request $request)
+    public function summaryWithEndAction(Request $request)
     {
         return $this->render('default/vito.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
@@ -32,6 +32,16 @@ class DefaultController extends Controller
      * @Route("/{unitType}/{unit}/{agg}", name="summary_breakdown", requirements={"agg"="years|months|days|weeks"})
      */
     public function summaryBreakdownAction(Request $request)
+    {
+        return $this->render('default/vito.html.twig', [
+            'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
+        ]);
+    }
+
+    /**
+     * @Route("/{agg}/{numUnits}", name="summary_view", requirements={"agg"="years|months|days|weeks"})
+     */
+    public function summaryAction(Request $request)
     {
         return $this->render('default/vito.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,

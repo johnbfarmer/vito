@@ -37,7 +37,7 @@ export default class Summary extends React.Component {
         let units = props.match.params.units || 12
         let dateStart = null
         let dateEnd = null
-        if ('unitType' in props.match.params) {
+        if ('endDate' in props.match.params) {
             let obj = this.calcUnits(props.match.params);
             units = obj.units;
             dateStart = obj.dateStart;
@@ -61,7 +61,7 @@ export default class Summary extends React.Component {
             selectedMetrics: ['distance_run'],
             makeApiCall: true,
             title: 'Vito Stats',
-            prevLink: '/months/12?dateEnd=2019-04-01',
+            prevLink: '/months/12/20190401',
             nextLink: null,
         };
 
@@ -102,21 +102,23 @@ export default class Summary extends React.Component {
     }
 
     calcUnits(routeParams) {
-        if (routeParams.unitType === 'month') {
-            let days = moment(routeParams.unit, 'YYYYMM').daysInMonth();
-            let lastDayOfMonth = moment(routeParams.unit + days, 'YYYYMMDD').format('YYYY-MM-DD');
-            let units = days;
-            let dateEnd = lastDayOfMonth;
-            let today = moment().format('YYYY-MM-DD');
-            if (today < lastDayOfMonth) {
-                dateEnd = today;
-                units = moment().format('D');
-            }
-            let dateStart = moment(dateEnd).format('YYYY-MM-01');
+        if (routeParams.agg === 'days') {
+            let mDateEnd = moment(routeParams.endDate, 'YYYYMMDD');
+            let units = routeParams.numUnits;
+            let dateEnd = mDateEnd.format('YYYY-MM-DD');
+            let dateStart = mDateEnd.subtract((units - 1), 'days').format('YYYY-MM-DD');
+            return { units, dateEnd, dateStart }
+        }
+        if (routeParams.agg === 'months') {
+            let mDateEnd = moment(routeParams.endDate, 'YYYYMMDD');
+            let units = routeParams.numUnits;
+            let dateEnd = mDateEnd.endOf('month').format('YYYY-MM-DD');
+            let mDateEndFirstOfMonth = mDateEnd.startOf('month');
+            let dateStart = mDateEndFirstOfMonth.subtract((units - 1) , 'months').format('YYYY-MM-01');
             return { units, dateEnd, dateStart }
         }
 
-        if (routeParams.unitType === 'week') {
+        if (routeParams.agg === 'weeks') {
             let yr = routeParams.unit.substring(0, 4);
             let wk = routeParams.unit.substring(4);
             let dateStart = moment(yr).add(wk-1, 'weeks').startOf('isoWeek').format('YYYY-MM-DD');
@@ -125,7 +127,7 @@ export default class Summary extends React.Component {
             return { units, dateEnd, dateStart }
         }
 
-        if (routeParams.unitType === 'year') {
+        if (routeParams.agg === 'years') {
             let yr = routeParams.unit.substring(0, 4);
             let dateStart = moment(routeParams.unit + '0101', 'YYYYMMDD').format('YYYY-MM-DD');
             let dateEnd = moment(dateStart).endOf('year').format('YYYY-MM-DD');
@@ -139,11 +141,17 @@ export default class Summary extends React.Component {
         let display = moment(vals.date).format('MMM D, YYYY');
         if (typeof(vals.id) == 'string') {
             if (vals.id.substring(0,3) === 'ym_') {
-                url = '/month/' + vals.id.substring(3) + '/days';
+                let mDateEnd = moment(vals.iso_date).endOf('month');
+                let dateEnd = mDateEnd.format('YYYYMMDD');
+                let numUnits = mDateEnd.daysInMonth();
+                url = '/days/' + numUnits + '/' + dateEnd;
                 display = moment(vals.date).format('MMM, YYYY');
             }
             if (vals.id.substring(0,3) === 'yw_') {
-                url = '/week/' + vals.id.substring(3) + '/days';
+                let mDateEnd = moment(vals.iso_date).endOf('isoweek');
+                let dateEnd = mDateEnd.format('YYYYMMDD');
+                let numUnits = 7;
+                url = '/days/' + numUnits + '/' + dateEnd;
                 display = 'Week ' + vals.id.substring(7) + ' of ' + vals.id.substring(3, 7);
             }
             if (vals.date.length === 4) {
