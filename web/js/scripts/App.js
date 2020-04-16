@@ -8,9 +8,8 @@ class App extends React.Component {
           <div className="App">
             <header className="App-header">
               <Router>
-                <Route path="/:agg/:numUnits/:endDate" render={(props) => {return <Summary { ...props } />}} />
-                <Route path="/:unitType/:unit/:agg/:fake" render={(props) => {return <Summary { ...props } />}} />
-                <Route path="/:agg/:units" exact render={(props) => {return <Summary { ...props } />}} />
+                <Route path="/:agg/:numUnits/:endDate" exact render={(props) => {return <Summary { ...props } />}} />
+                <Route path="/:agg/:numUnits" exact render={(props) => {return <Summary { ...props } />}} />
                 <Route path="/" exact render={(props) => {return <Summary { ...props } />}} />
               </Router>
             </header>
