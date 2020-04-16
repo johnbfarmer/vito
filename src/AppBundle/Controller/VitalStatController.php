@@ -119,6 +119,30 @@ class VitalStatController extends Controller
     }
 
     /**
+     * @Route("/today/{personId}", name="vitalstat_today")
+     */
+    public function todayAction(Request $request, $personId)
+    {
+        // does the record not exist? create it
+        $em = $this->getDoctrine()->getManager();
+        $dateObj = new \DateTime();
+        $vitalStat = $em->getRepository('AppBundle:VitalStat')->findOneBy(['date' => $dateObj, 'personId' => $personId]);
+        if ($vitalStat && $id = $vitalStat->getId()) {
+            return $this->redirectToRoute('vitalstat_edit', ['id' => $id]);
+        }
+
+        $vitalStat = new Vitalstat();
+        $vitalStat->setDate(new \DateTime());
+        $person = $em->getRepository('AppBundle:Person')->find($personId);
+        $vitalStat->setPerson($person);
+        $em->persist($vitalStat);
+        $em->flush();
+        $id = $vitalStat->getId();
+        // redir to edit
+        return $this->redirectToRoute('vitalstat_edit', ['id' => $id]);
+    }
+
+    /**
      * Displays a form to edit an existing vitalStat entity.
      *
      * @Route("/{id}/edit", name="vitalstat_edit")
