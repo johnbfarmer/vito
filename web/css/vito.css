@@ -128,3 +128,17 @@
 .margins-10 {
     margin: 10px;
 }
+
+.nav-input-sm {
+    width: 4ch;
+    text-align: right;
+    margin-right: 1em;
+    margin-left: 1em;
+}
+
+.nav-input-lg {
+    width: 20ch;
+    text-align: right;
+    margin-right: 1em;
+    margin-left: 1em;
+}

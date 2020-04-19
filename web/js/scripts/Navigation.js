@@ -1,20 +1,28 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom'
+const moment = require('moment');
 
 function Navigation (props) {
     let linkToday = '/vito/today/' + props.personId
     let linkNew = '/vito/new/' + props.personId
+    let today = moment().format('YYYYMMDD');
 
     return (
         <div>
             <div>
-                <a href="/">Home</a>
+                <a href="/">home</a>
             </div>
             <div>
-                <a href={ linkToday }>Today</a>
+                <a href={ linkNew }>new record</a>
             </div>
             <div>
-                <a href={ linkNew }>New Record</a>
+                <a href={ linkToday }>today</a>
+            </div>
+            <div>
+                <a href={'/days/10/' + today} >last few days</a>
+            </div>
+            <div>
+                <a href={'/weeks/5/' + today} >last few weeks</a>
             </div>
         </div>
     );

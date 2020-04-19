@@ -11,9 +11,9 @@ export default class VitoNav extends React.Component {
         return (
             <div>
                 <Navigation { ...this.props } />
-                <PersonSelect { ...this.props } />
                 {chartNav}
                 {aggNav}
+                <PersonSelect { ...this.props } />
             </div>
         );
     }
