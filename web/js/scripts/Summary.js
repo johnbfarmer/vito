@@ -176,6 +176,10 @@ console.log(dateEnd, dateStart)
                 dateEnd = mDateEnd.endOf('month').format('YYYY-MM-DD');
                 let mDateEndFirstOfMonth = mDateEnd.startOf('month');
                 dateStart = mDateEndFirstOfMonth.subtract((units - 1) , 'months').format('YYYY-MM-01');
+                prevDateEnd = moment(params.dateEnd, 'YYYYMM01').subtract(units, 'months').endOf('month');
+                nextDateEnd = moment(params.dateEnd, 'YYYYMM01').add(units, 'months').endOf('month');
+                prevLink = '/months/' + units + '/' + prevDateEnd.format('YYYYMMDD');
+                nextLink = '/months/' + units + '/' + nextDateEnd.format('YYYYMMDD');
                 return { units, dateEnd, dateStart, prevLink, nextLink };
 
             case 'weeks':
