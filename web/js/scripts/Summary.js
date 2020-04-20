@@ -49,9 +49,6 @@ export default class Summary extends React.Component {
             dateEnd: dateEnd,
         }
         let obj = this.calcUnits(params);
-console.log(dateEnd);
-console.log(params);
-console.log(obj);
         units = obj.units;
         dateStart = obj.dateStart;
         dateEnd = obj.dateEnd;
@@ -63,16 +60,16 @@ console.log(obj);
             agg: props.match.params.agg || 'months',
             dateRangeId: null,
             dateRangeType: 'ym',
-            chartType: '',
+            chartType: props.chartType || '',
             refreshChart: false,
             loading: true,
-            personId: 1,
+            personId: props.personId || 1,
             units: units,
             dateStart: dateStart,
             dateEnd: dateEnd,
             columns: [],
             total: [],
-            selectedMetrics: ['distance_run'],
+            selectedMetrics: props.chartSelectedMetrics || ['distance_run'],
             makeApiCall: true,
             title: 'Vito Stats',
             prevLink: prevLink,
@@ -147,12 +144,11 @@ console.log(obj);
         let nextDateEnd = null;
         let mDateEnd = moment(endDate, 'YYYYMMDD');
         let units = params.numUnits;
-console.log(params)
+
         switch(params.agg) {
             case 'days':
                 let dateEnd = mDateEnd.format('YYYY-MM-DD');
                 let dateStart = mDateEnd.subtract((units - 1), 'days').format('YYYY-MM-DD');
-console.log(dateEnd, dateStart)
                 switch (units) {
                     case '7':
                         prevDateEnd = moment(params.dateEnd, 'YYYYMMDD').subtract(7, 'days').format('YYYYMMDD');

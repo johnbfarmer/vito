@@ -13,8 +13,11 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $session = $request->getSession();
+        $vars = $this->commonVars($session);
         return $this->render('default/vito.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
+            'dataModel' => $vars,
         ]);
     }
 
@@ -23,18 +26,11 @@ class DefaultController extends Controller
      */
     public function summaryWithEndAction(Request $request)
     {
+        $session = $request->getSession();
+        $vars = $this->commonVars($session);
         return $this->render('default/vito.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
-        ]);
-    }
-
-    /**
-     * @Route("/{unitType}/{unit}/{agg}", name="summary_breakdown", requirements={"agg"="years|months|days|weeks"})
-     */
-    public function summaryBreakdownAction(Request $request)
-    {
-        return $this->render('default/vito.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
+            'dataModel' => $vars,
         ]);
     }
 
@@ -43,9 +39,29 @@ class DefaultController extends Controller
      */
     public function summaryAction(Request $request)
     {
+        $session = $request->getSession();
+        $vars = $this->commonVars($session);
         return $this->render('default/vito.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
+            'dataModel' => $vars,
         ]);
+    }
+
+    protected function commonVars($session, $personId = null)
+    {
+        if ($personId) {
+            $session->set('person_id', $personId);
+        } else {
+            $personId = $session->get('person_id') ?: 1;
+        }
+
+        return [
+            'personId' => $session->get('person_id') ?: 1,
+            'chartType' => $session->get('chart_type') ?: 'column',
+            'chartSelectedMetrics' => $session->get('chart_selected_metrics') ?: ['za'],
+            // 'chartType' => $session->get('chart_type') ?: 'none',
+            // 'chartSelectedMetrics' => $session->get('chart_selected_metrics') ?: null,
+        ];
     }
 
     /**

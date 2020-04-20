@@ -13,8 +13,8 @@ export default class VitoChart extends React.Component {
         this.state = {
             selectedMetrics: ['weight'],
             availableMetrics: ['weight'],
-            chartType: '',
-            refreshChart: this.props.refreshChart,
+            chartType: props.chartType,
+            refreshChart: props.refreshChart,
             config: {},
         }
     }

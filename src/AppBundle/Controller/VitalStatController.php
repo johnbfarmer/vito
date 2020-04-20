@@ -269,7 +269,7 @@ class VitalStatController extends Controller
         } else {
             $personId = $session->get('person_id') ?: 1;
         }
-        // $this->$container->set('session')->set('person_id', $personId);
+
         return [
             'personId' => $personId,
         ];
@@ -311,6 +311,11 @@ class VitalStatController extends Controller
             'start' => $dateStart,
             'end' => $dateEnd,
         ];
+
+        $session = $request->getSession();
+        if ($personId && $personId !== $session->get('person_id')) {
+            $session->set('person_id', $personId);
+        }
 
         switch ($agg) {
             case 'years':
