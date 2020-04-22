@@ -67,13 +67,11 @@ export default class ChartMetricSelect extends React.Component {
     }
 }
 
-export class ChartMetricSelectItem extends React.Component {
-    render() {
-        var cls = this.props.selected ? 'hot pointer' : 'pointer';
-        return (
-            <div className={cls} data-metric={this.props.metric} onClick={this.props.metricSelectAdd} onDoubleClick={this.props.singleMetricSelect}>
-                {this.props.label}
-            </div>
-        );
-    }
+const ChartMetricSelectItem = (props) => {
+    var cls = props.selected ? 'hot pointer' : 'pointer';
+    return (
+        <div className={cls} data-metric={props.metric} onClick={props.metricSelectAdd} onDoubleClick={props.singleMetricSelect}>
+            {props.label}
+        </div>
+    );
 }
