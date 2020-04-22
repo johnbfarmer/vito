@@ -200,7 +200,7 @@ export default class Summary extends React.Component {
 
             case 'years':
                 dateEnd = mDateEnd.endOf('year').format('YYYY-MM-DD');
-                dateStart = mDateEnd.endOf('year').format('YYYY-MM-DD');
+                dateStart = mDateEnd.subtract(units - 1, 'years').startOf('year').format('YYYY-MM-DD');
                 prevDateEnd = moment(dateEnd).subtract(units, 'years').endOf('year');
                 nextDateEnd = moment(dateEnd).add(units, 'years').endOf('year');
                 prevLink = '/years/' + units + '/' + prevDateEnd.format('YYYYMMDD');
@@ -211,7 +211,6 @@ export default class Summary extends React.Component {
 
     dateCellDisplay(vals, rowIdx, colIdx) {
         let url = '/vito/' + vals.id + '/edit';
-// console.log(vals.date)
         let display = moment(vals.date).format('MMM D, YYYY');
         if (typeof(vals.id) == 'string') {
             if (vals.id.substring(0,3) === 'ym_') {
