@@ -57,10 +57,8 @@ class DefaultController extends Controller
 
         return [
             'personId' => $session->get('person_id') ?: 1,
-            'chartType' => $session->get('chart_type') ?: 'column',
-            'chartSelectedMetrics' => $session->get('chart_selected_metrics') ?: ['za'],
-            // 'chartType' => $session->get('chart_type') ?: 'none',
-            // 'chartSelectedMetrics' => $session->get('chart_selected_metrics') ?: null,
+            'chartType' => $session->get('chart_type') ?: '',
+            'chartSelectedMetrics' => $session->get('chart_selected_metrics') ?: ['distance_run'],
         ];
     }
 

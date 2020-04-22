@@ -35,10 +35,22 @@ export default class VitoChart extends React.Component {
         }
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        // return nextProps.refreshChart;
+// console.log(nextState, this.state);
+// console.log(nextProps, this.props, nextState, this.state);
+        return true;
+        // return this.state.chartType !== nextState.chartType
+        // || this.state.selectedMetrics[0] !== nextState.selectedMetrics[0]
+        // || this.state.availableMetrics[0] !== nextState.availableMetrics[0]
+        // || nextState.refreshChart || nextProps.refreshChart
+    }
+
     updateConfig() {
         if (this.props.data.length < 1) {
             return;
         }
+console.log('update');
         var yVal = 0.0;
         var xVal = 0;
         var dt = 0;

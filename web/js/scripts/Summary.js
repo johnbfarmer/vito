@@ -56,24 +56,24 @@ export default class Summary extends React.Component {
         nextLink = obj.nextLink;
 
         this.state = {
-            data: [],
             agg: props.match.params.agg || 'months',
+            chartType: props.chartType || '',
+            columns: [],
+            data: [],
+            dateEnd: dateEnd,
             dateRangeId: null,
             dateRangeType: 'ym',
-            chartType: props.chartType || '',
-            refreshChart: false,
-            loading: true,
-            personId: props.personId || 1,
-            units: units,
             dateStart: dateStart,
-            dateEnd: dateEnd,
-            columns: [],
-            total: [],
-            selectedMetrics: props.chartSelectedMetrics || ['distance_run'],
+            loading: true,
             makeApiCall: true,
-            title: 'Vito Stats',
-            prevLink: prevLink,
             nextLink: nextLink,
+            personId: props.personId || 1,
+            prevLink: prevLink,
+            refreshChart: true,
+            selectedMetrics: props.chartSelectedMetrics || ['distance_run'],
+            title: 'Vito Stats',
+            total: [],
+            units: units,
         };
 
         this.busy = true;
@@ -81,6 +81,7 @@ export default class Summary extends React.Component {
         this.handleData = this.handleData.bind(this);
         this.dateCellDisplay = this.dateCellDisplay.bind(this);
         this.updateState = this.updateState.bind(this);
+        this.makeChartApiCall = this.makeChartApiCall.bind(this);
     }
 
     componentDidMount() {
@@ -88,10 +89,13 @@ export default class Summary extends React.Component {
     }
 
     handleData() {
-        if (!this.state.makeApiCall) {
-            return
+        if (this.state.refreshChart) {
+            this.makeChartApiCall();
         }
-        var id = this.state.personId || 1;
+        if (!this.state.makeApiCall) {
+            return;
+        }
+        var id = this.state.personId;
         let endDate = this.state.dateEnd !== null ? this.state.dateEnd.replace(/-/g, '') : moment().endOf('month').format('YYYYMMDD');
         let simulatedRouteParams = {
             dateEnd: endDate,
@@ -125,6 +129,12 @@ export default class Summary extends React.Component {
             }
             this.loading(false);
         });
+    }
+
+    makeChartApiCall() {
+        let qs = 'type=' + this.state.chartType + '&m=' + JSON.stringify(this.state.selectedMetrics);
+        let url = '/vito/chart?' + qs;
+        getData(url);
     }
 
     calcUnits(params) {

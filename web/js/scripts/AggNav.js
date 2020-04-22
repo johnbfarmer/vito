@@ -26,7 +26,7 @@ const AggNav = (props) => {
                     <input
                         onChange={(e) => {
                             var n = Number(e.target.value);
-                            props.updateState({ units: n, makeApiCall: false });
+                            props.updateState({ units: n, makeApiCall: false, refreshChart: false });
                         }}
                         value={props.units}
                         className='nav-input-sm'
@@ -34,7 +34,7 @@ const AggNav = (props) => {
                     <select
                         onChange={(e) => {
                             var n = e.target.value
-                            props.updateState({ agg: n, makeApiCall: false })
+                            props.updateState({ agg: n, makeApiCall: false, refreshChart: false })
                         }}
                         value={props.agg}
                     >
@@ -46,7 +46,7 @@ const AggNav = (props) => {
                     <input
                         onChange={(e) => {
                             var n = e.target.value;
-                            props.updateState({ dateEnd: n, makeApiCall: false });
+                            props.updateState({ dateEnd: n, makeApiCall: false, refreshChart: false });
                         }}
                         value={props.dateEnd}
                         className='nav-input-lg'

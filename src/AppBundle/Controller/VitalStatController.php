@@ -343,4 +343,22 @@ class VitalStatController extends Controller
         $tablifier = Tablifier::tablify($vitalStats, $fields, $total);
         return new JsonResponse($tablifier->getTable());
     }
+
+    /**
+     * @Route("/chart", name="chart_update")
+     * @Method("GET")
+     */
+    public function chartAction(Request $request)
+    {
+        $type = $request->query->has('type') ? $request->query->get('type') : null;
+        $m = $request->query->has('type') ? json_decode($request->query->get('m'), true) : null;
+        $session = $request->getSession();
+        if ($type) {
+            $session->set('chart_type', $type);
+        }
+        if ($m) {
+            $session->set('chart_selected_metrics', $m);
+        }
+        return new JsonResponse([]);
+    }
 }
