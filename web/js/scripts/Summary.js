@@ -80,6 +80,7 @@ export default class Summary extends React.Component {
         this.makeApiCall = true;
         this.handleData = this.handleData.bind(this);
         this.dateCellDisplay = this.dateCellDisplay.bind(this);
+        this.dayBoolAggPctCellDisplay = this.dayBoolAggPctCellDisplay.bind(this);
         this.updateState = this.updateState.bind(this);
         this.makeChartApiCall = this.makeChartApiCall.bind(this);
     }
@@ -209,6 +210,15 @@ export default class Summary extends React.Component {
         }
     }
 
+    dayBoolAggPctCellDisplay(vals, rowIdx, colIdx) {
+        let display = this.state.agg === 'days' ? (vals.za == 1 ? 'yes' : 'no') : Math.round(vals.za * 100, 2) + '%';
+        return (
+            <Table.Cell key={'cell_' + rowIdx + '_' + colIdx}>
+                { display }
+            </Table.Cell>
+        )
+    }
+
     dateCellDisplay(vals, rowIdx, colIdx) {
         let url = '/vito/' + vals.id + '/edit';
         let display = moment(vals.date).format('MMM D, YYYY');
@@ -259,7 +269,7 @@ export default class Summary extends React.Component {
             columns: this.state.columns,
             total: this.state.total,
             cb: {},
-            specialCols: { date: this.dateCellDisplay },
+            specialCols: { date: this.dateCellDisplay, za: this.dayBoolAggPctCellDisplay },
         }
         var tbl = tableHelper.tablify(propsForTable);
 

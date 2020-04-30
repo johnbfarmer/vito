@@ -130,7 +130,7 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
     protected function summaryQuery($agg, $limit, $dates = []) {
         list($key, $dt, $id) = $this->getSummaryQueryPartsByAgg($agg);
 
-        $sql = '
+        $sel = '
         SELECT 
             SUM(`distance_run`) AS distance_run,
             ROUND(SUM(`distance`), 1) AS distance,
@@ -155,7 +155,38 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
             ' . $dt . ' AS `date`,
             MIN(v.date) AS `iso_date`,
             CONCAT(YEAR(v.date), LPAD(MONTH(v.date),2,0)) as `ym`,
-            ' . $id . ' AS `id`
+            ' . $id . ' AS `id`';
+
+        if ($agg === 'days') {
+            $sel = '
+        SELECT 
+            distance_run,
+            distance,
+            sleep,
+            steps,
+            IFNULL(ROUND(`steps`/`distance`, 2), 0) AS stepsPerKm,
+            alcohol,
+            za,
+            tobacco,
+            pulse,
+            weight,
+            floors,
+            floors_run,
+            very_active_minutes,
+            distance_biked,
+            minutes_biked,
+            swim,
+            systolic,
+            diastolic,
+            CONCAT(`systolic`,"/",`diastolic`) AS bp,
+            abdominals,
+            ' . $dt . ' AS `date`,
+            v.date AS `iso_date`,
+            CONCAT(YEAR(v.date), LPAD(MONTH(v.date),2,0)) as `ym`,
+            ' . $id . ' AS `id`';
+        }
+
+        $sql = $sel . '
         FROM vital_stats v
         INNER JOIN people p ON v.person_id = p.id
         WHERE p.id = :personId ';
