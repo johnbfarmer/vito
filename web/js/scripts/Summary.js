@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button, Modal } from 'react-bootstrap';
 import { Grid, Header, Table } from 'semantic-ui-react'
 
 import VitoChart from './VitoChart';

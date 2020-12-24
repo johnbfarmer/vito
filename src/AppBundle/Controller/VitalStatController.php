@@ -353,7 +353,7 @@ class VitalStatController extends Controller
         $type = $request->query->has('type') ? $request->query->get('type') : null;
         $m = $request->query->has('type') ? json_decode($request->query->get('m'), true) : null;
         $session = $request->getSession();
-        if ($type) {
+        if ($type !== null) {
             $session->set('chart_type', $type);
         }
         if ($m) {

@@ -11,7 +11,7 @@ const AggNav = (props) => {
         )
     })
 
-    let de = ''
+    let de = '';
     let d = moment(props.dateEnd)
     if (d.isValid()) {
         de = '/' + d.format('YYYYMMDD');
@@ -27,6 +27,11 @@ const AggNav = (props) => {
                         onChange={(e) => {
                             var n = Number(e.target.value);
                             props.updateState({ units: n, makeApiCall: false, refreshChart: false });
+                        }}
+                        onKeyPress={(e) => {
+                            if (e.key === 'Enter') {
+                                window.location.href = link
+                            }
                         }}
                         value={props.units}
                         className='nav-input-sm'

@@ -10,7 +10,7 @@ class Tablifier
         $rows = [],
         $total = [],
         $colConfig = [],
-        $hiddenCols = ['iso_date', 'id'],
+        $hiddenCols = ['iso_date', 'id', 'comments'],
         $table = [];
 
     public function __construct($data, $limitCols, $total)
@@ -125,7 +125,7 @@ class Tablifier
             'very_active_minutes' => 'VAM',
             // 'alcohol' => 'Alcohol',
             // 'tobacco' => 'Tobacco',
-            // 'comments' => 'Comments',
+            'comments' => 'Comments',
             'distance_biked' => 'Distance Biked',
             'minutes_biked' => 'Minutes Biked',
             'swim' => 'Swim',
