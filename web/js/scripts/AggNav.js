@@ -41,6 +41,11 @@ const AggNav = (props) => {
                             var n = e.target.value
                             props.updateState({ agg: n, makeApiCall: false, refreshChart: false })
                         }}
+                        onKeyPress={(e) => {
+                            if (e.key === 'Enter') {
+                                window.location.href = link
+                            }
+                        }}
                         value={props.agg}
                     >
                         {aggChoices}
@@ -52,6 +57,11 @@ const AggNav = (props) => {
                         onChange={(e) => {
                             var n = e.target.value;
                             props.updateState({ dateEnd: n, makeApiCall: false, refreshChart: false });
+                        }}
+                        onKeyPress={(e) => {
+                            if (e.key === 'Enter') {
+                                window.location.href = link
+                            }
                         }}
                         value={props.dateEnd}
                         className='nav-input-lg'
