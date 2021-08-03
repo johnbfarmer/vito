@@ -120,6 +120,11 @@ class VitalStat
     private $tobacco;
 
     /**
+     * @ORM\Column(name="score", type="decimal", precision=2, scale=6, nullable=true)
+     */
+    private $score;
+
+    /**
      * @ORM\Column(name="comments", type="text", nullable=true)
      */
     private $comments;
@@ -367,6 +372,18 @@ class VitalStat
     public function setTobacco($tobacco)
     {
         $this->tobacco = $tobacco;
+
+        return $this;
+    }
+
+    public function getScore()
+    {
+        return $this->score;
+    }
+
+    public function setScore($score)
+    {
+        $this->score = $score;
 
         return $this;
     }

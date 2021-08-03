@@ -30,6 +30,7 @@ class GenericHelper
             'steps' => 'Steps',
             'avg_steps' => 'Steps/Km',
             'abdominals' => 'Abdominals',
+            'score' => 'Score',
             'weight' => 'Weight',
             'sleep' => 'Sleep',
             'za' => 'ZA',

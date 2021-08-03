@@ -16,6 +16,7 @@ const metricLabels = {
     'sleep': 'Sleep',
     'weight': 'Weight',
     'abdominals': 'Abdominals',
+    'score': 'Score',
     'systolic': 'Systolic',
     'diastolic': 'Diastolic',
     'bp': 'Blood Pressure',
@@ -218,6 +219,15 @@ export default class Summary extends React.Component {
         )
     }
 
+    pctCellTotalDisplay(val, idx) {
+        let display = Math.round(val * 100, 2) + '%';
+        return (
+            <Table.Cell key={'tot_' + idx} className='green'>
+                {display}
+            </Table.Cell>
+        )
+    }
+
     dateCellDisplay(vals, rowIdx, colIdx) {
         let url = '/vito/' + vals.id + '/edit';
         let display = moment(vals.date).format('MMM D, YYYY');
@@ -269,6 +279,7 @@ export default class Summary extends React.Component {
             total: this.state.total,
             cb: {},
             specialCols: { date: this.dateCellDisplay, za: this.dayBoolAggPctCellDisplay },
+            specialColsTot: { za: this.pctCellTotalDisplay },
         }
         var tbl = tableHelper.tablify(propsForTable);
 

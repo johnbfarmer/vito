@@ -113,6 +113,7 @@ class Tablifier
             'sleep' => 'Sleep',
             'weight' => 'Weight',
             'abdominals' => 'Abdominals',
+            'score' => 'Score',
             // 'systolic' => 'Systolic',
             // 'diastolic' => 'Diastolic',
             'bp' => 'Blood Pressure',

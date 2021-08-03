@@ -63,6 +63,7 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
             CONCAT(systolic, "/", diastolic) AS bp,
             comments,
             abdominals,
+            score,
             `date`,
             `date` AS iso_date
         FROM vital_stats v
@@ -153,6 +154,7 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
             ROUND(AVG(`diastolic`)) AS diastolic,
             CONCAT(ROUND(AVG(`systolic`)),"/",ROUND(AVG(`diastolic`))) AS bp,
             ROUND(SUM(`abdominals`)) AS abdominals,
+            ROUND(AVG(`score`)) AS score,
             ' . $dt . ' AS `date`,
             MIN(v.date) AS `iso_date`,
             CONCAT(YEAR(v.date), LPAD(MONTH(v.date),2,0)) as `ym`,
@@ -181,6 +183,7 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
             diastolic,
             CONCAT(`systolic`,"/",`diastolic`) AS bp,
             abdominals,
+            score, 
             comments,
             ' . $dt . ' AS `date`,
             v.date AS `iso_date`,
@@ -236,6 +239,7 @@ class VitalStatRepository extends \Doctrine\ORM\EntityRepository
             ROUND(SUM(`swim`)) AS swim,
             CONCAT(ROUND(AVG(`systolic`)),"/",ROUND(AVG(`diastolic`))) AS bp,
             ROUND(SUM(`abdominals`)) AS abdominals,
+            ROUND(AVG(`score`)) AS score,
             "total" AS `date`,
             "total" AS `iso_date`,
             "total" AS `ym`,

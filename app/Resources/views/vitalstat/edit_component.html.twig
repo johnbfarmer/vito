@@ -1,3 +1,11 @@
+{% block stylesheets %}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css"></link>
+    <link rel="stylesheet" href="{{ asset('css/vito.css') }}" />
+{% endblock %}
+{% block javascript %}
+    <div id="content" data-model="{{dataModel|json_encode()}}" class="margins-10"></div>
+    <script src="{{ asset('js/main.js') }}"></script>
+{% endblock %}
 {% block content %}
     {{ form_start(edit_form) }}
         {{ form_widget(edit_form) }}

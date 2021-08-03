@@ -40,9 +40,12 @@ class FitbitFetch extends BaseProcess
         }
     }
 
-    protected function saveData($data, $date)
+    protected function saveData($data, $date, $type = null)
     {
-        $file = 'data' . DIRECTORY_SEPARATOR . str_replace('-', '', $date);
+        $file = __DIR__ . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, ['..', '..', '..', 'data',  str_replace('-', '', $date)]);
+        if ($type === 'sleep') {
+            $file = __DIR__ . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, ['..', '..', '..', 'data',  'sleep', str_replace('-', '', $date)]);
+        }
         try {
             file_put_contents($file, json_encode($data));
         } catch(\Exception $e) {
@@ -71,6 +74,9 @@ class FitbitFetch extends BaseProcess
             $this->data['sleep'],
             $this->data['floors'],
             $this->data['veryActiveMinutes'],
+            $this->data['fairlyActiveMinutes'],
+            $this->data['lightlyActiveMinutes'],
+            $this->data['sedentaryMinutes'],
         ];
 
         $insert .= '
@@ -85,14 +91,22 @@ class FitbitFetch extends BaseProcess
 
         $sql = '
         INSERT INTO vital_stats
-        (`date`, `person_id`, `steps`, `distance`, `sleep`, `floors`, `very_active_minutes`)
+        (`date`, `person_id`, `steps`, `distance`, `sleep`, `floors`, `very_active_minutes`, `fairly_active_minutes`, `lightly_active_minutes`, `sedentary_minutes`)
         VALUES ' . $insert . '
         ON DUPLICATE KEY UPDATE 
         `steps` = VALUES(`steps`),
         `distance` = VALUES(`distance`),
         `floors` = VALUES(`floors`),
         `very_active_minutes` = VALUES(`very_active_minutes`),
+        `fairly_active_minutes` = VALUES(`fairly_active_minutes`),
+        `lightly_active_minutes` = VALUES(`lightly_active_minutes`),
+        `sedentary_minutes` = VALUES(`sedentary_minutes`),
         `sleep` = VALUES(`sleep`)';
+
+        $connection->exec($sql);
+
+        $sql = 'UPDATE vital_stats SET score = 10 * distance_run + 5 * abdominals + 5 * swim + 8 * distance_biked + 1 * very_active_minutes + 0.4 * fairly_active_minutes + 0.2 * lightly_active_minutes + 1 * (floors + floors_run) + 5 * distance
+            WHERE person_id = ' . $this->personId . ' AND `date` = "' . $date . '";';
 
         $connection->exec($sql);
     }
@@ -116,6 +130,9 @@ class FitbitFetch extends BaseProcess
             'steps' => $activities['summary']['steps'],
             'floors' => $activities['summary']['floors'],
             'veryActiveMinutes' => $activities['summary']['veryActiveMinutes'],
+            'fairlyActiveMinutes' => $activities['summary']['fairlyActiveMinutes'],
+            'lightlyActiveMinutes' => $activities['summary']['lightlyActiveMinutes'],
+            'sedentaryMinutes' => $activities['summary']['sedentaryMinutes'],
             'distance' => $activities['summary']['distances'][0]['distance'], // improve, unsafe relying on position
         ];
     }
@@ -124,7 +141,7 @@ class FitbitFetch extends BaseProcess
     {
         $result = $this->curl('sleep', $date);
         $sleep = $result;
-        // $this->saveData($activities, $date); // tbi
+        $this->saveData($sleep, $date, 'sleep');
         $totalMinutesAsleep = $sleep['summary']['totalMinutesAsleep'];
         return $totalMinutesAsleep > 90 ? $totalMinutesAsleep : 'null';
     }

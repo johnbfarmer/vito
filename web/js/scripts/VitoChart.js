@@ -112,6 +112,8 @@ export default class VitoChart extends React.Component {
                 }
 
                 config.series[seriesKey].data.unshift([xVal, yVal]);
+                config.series[seriesKey].connectNulls = true;
+                // config.yAxis[seriesKey].min = 10 * seriesKey;
             });
         });
 

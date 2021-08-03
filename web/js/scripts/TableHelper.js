@@ -74,6 +74,9 @@ const tablify = (props) => {
         props.total.date = 'TOTAL';
         total = columns.map((vals, idx) => {
             let tot = props.total[vals.uid]
+            if ('specialColsTot' in props && vals.uid in props.specialColsTot) {
+                return props.specialColsTot[vals.uid](tot, idx);
+            }
             return (
                 <Table.Cell key={'tot_' + vals.uid} className='green'>{tot}</Table.Cell>
             )

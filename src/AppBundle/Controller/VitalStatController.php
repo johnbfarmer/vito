@@ -161,6 +161,7 @@ class VitalStatController extends Controller
         $vars['vitalStat'] = $vitalStat;
         $vars['edit_form'] = $editForm->createView();
         $vars['delete_form'] = $deleteForm->createView();
+        $vars['dataModel'] = ['personId' => $vars['personId']];
 
         // add back isValid when csrf issue is solved :(
         // if ($editForm->isSubmitted() && $editForm->isValid()) {
