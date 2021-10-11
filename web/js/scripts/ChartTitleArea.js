@@ -6,7 +6,6 @@ const moment = require('moment');
 const ChartTitleArea = (props) => {
     let isDisabledPrev = props.prevLink === null;
     let isDisabledNext = props.nextLink === null;
-console.log(props);
     let title = props.title;
     if (props.units) {
         title = props.units + ' ' + props.agg

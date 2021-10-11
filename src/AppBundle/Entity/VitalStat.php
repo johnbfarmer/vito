@@ -120,7 +120,7 @@ class VitalStat
     private $tobacco;
 
     /**
-     * @ORM\Column(name="score", type="decimal", precision=2, scale=6, nullable=true)
+     * @ORM\Column(name="score", type="decimal", precision=2, scale=6, nullable=false, options={"default" = 0.00})
      */
     private $score;
 
