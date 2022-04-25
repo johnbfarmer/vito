@@ -126,6 +126,12 @@ class FitbitFetch extends BaseProcess
             throw new \Exception('Summary is empty.');
         }
         $this->saveData($activities, $date);
+        $distance = 0;
+        foreach ($activities['summary']['distances'] as $d) {
+            if ($d['activity'] === 'total') {
+                $distance = $d['distance'];
+            }
+        }
         return [
             'steps' => $activities['summary']['steps'],
             'floors' => $activities['summary']['floors'],
@@ -133,7 +139,7 @@ class FitbitFetch extends BaseProcess
             'fairlyActiveMinutes' => $activities['summary']['fairlyActiveMinutes'],
             'lightlyActiveMinutes' => $activities['summary']['lightlyActiveMinutes'],
             'sedentaryMinutes' => $activities['summary']['sedentaryMinutes'],
-            'distance' => $activities['summary']['distances'][0]['distance'], // improve, unsafe relying on position
+            'distance' => $distance,
         ];
     }
 

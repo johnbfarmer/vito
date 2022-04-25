@@ -15,6 +15,7 @@ const metricLabels = {
     'stepsPerKm': 'Steps/Km',
     'sleep': 'Sleep',
     'weight': 'Weight',
+    'height': 'Height',
     'abdominals': 'Abdominals',
     'score': 'Score',
     'systolic': 'Systolic',

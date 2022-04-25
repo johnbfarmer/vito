@@ -55,6 +55,11 @@ class VitalStat
     private $weight;
 
     /**
+     * @ORM\Column(name="height", type="decimal", precision=1, scale=5, nullable=true)
+     */
+    private $height;
+
+    /**
      * @ORM\Column(name="abdominals", type="decimal", precision=1, scale=5, nullable=false, options={"default" = 0.0})
      */
     private $abdominals = 0.0;
@@ -223,6 +228,18 @@ class VitalStat
     public function getWeight()
     {
         return $this->weight;
+    }
+
+    public function setHeight($height)
+    {
+        $this->Height = $height;
+
+        return $this;
+    }
+
+    public function getHeight()
+    {
+        return $this->height;
     }
 
     public function setAbdominals($abdominals)

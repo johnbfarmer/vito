@@ -32,6 +32,7 @@ class GenericHelper
             'abdominals' => 'Abdominals',
             'score' => 'Score',
             'weight' => 'Weight',
+            'height' => 'Height',
             'sleep' => 'Sleep',
             'za' => 'ZA',
             // 'alcohol' => 'Alcohol',

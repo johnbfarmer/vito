@@ -24,7 +24,7 @@ class VitalStatType extends AbstractType
                 $form->add('date')->add('person');
             }
 
-            $allFields = ['distance', 'distance_run', 'floors_run', 'distance_biked', 'minutes_biked', 'steps', 'sleep', 'weight', 'abdominals', 'score', 'bp', 'pulse', 'za', 'swim'];
+            $allFields = ['distance', 'distance_run', 'floors_run', 'distance_biked', 'minutes_biked', 'steps', 'sleep', 'weight',, 'height', 'abdominals', 'score', 'bp', 'pulse', 'za', 'swim'];
 
             $fields = $record->getPerson() && $record->getPerson()->getFields() ? array_intersect($record->getPerson()->getFields(), $allFields) : $allFields;
             $fields[] = 'comments';
