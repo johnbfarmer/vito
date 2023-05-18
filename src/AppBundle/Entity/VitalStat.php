@@ -100,6 +100,11 @@ class VitalStat
     private $veryActiveMinutes = 0;
 
     /**
+     * @ORM\Column(name="fairly_active_minutes", type="integer")
+     */
+    private $fairlyActiveMinutes = 0;
+
+    /**
      * @ORM\Column(name="distance_biked", type="decimal", precision=2, scale=5, nullable=false, options={"default" = 0.00})
      */
     private $distanceBiked = 0;
@@ -377,6 +382,18 @@ class VitalStat
     public function setVeryActiveMinutes($veryActiveMinutes)
     {
         $this->veryActiveMinutes = $veryActiveMinutes;
+
+        return $this;
+    }
+
+    public function getFairlyActiveMinutes()
+    {
+        return $this->fairlyActiveMinutes;
+    }
+
+    public function setFairlyActiveMinutes($fairlyActiveMinutes)
+    {
+        $this->fairlyActiveMinutes = $fairlyActiveMinutes;
 
         return $this;
     }

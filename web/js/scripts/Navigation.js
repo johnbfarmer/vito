@@ -27,6 +27,9 @@ function Navigation (props) {
             <div>
                 <a href={'/years/3/' + today} >last few years</a>
             </div>
+            <div>
+                <a href={'/vids'} >vids</a>
+            </div>
         </div>
     );
 }

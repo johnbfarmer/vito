@@ -24,6 +24,7 @@ const metricLabels = {
     'pulse': 'Pulse',
     'za': 'ZA',
     'very_active_minutes': 'VAM',
+    'fairly_active_minutes': 'FAM',
     'floors': 'Floors',
     'floors_run': 'Floors Run',
     'distance_biked': 'Distance Biked',

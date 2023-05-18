@@ -20,6 +20,18 @@ class DefaultController extends Controller
             'dataModel' => $vars,
         ]);
     }
+    /**
+     * @Route("/vids", name="vids")
+     */
+    public function videosAction(Request $request)
+    {
+        $session = $request->getSession();
+        $vars = $this->commonVars($session);
+        return $this->render('default/vito.html.twig', [
+            'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
+            'dataModel' => $vars,
+        ]);
+    }
 
     /**
      * @Route("/{agg}/{numUnits}/{endDate}", name="summary_view_with_end", requirements={"agg"="years|months|days|weeks"})
